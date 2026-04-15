@@ -25,9 +25,9 @@ public class Student {
 
     private double studentFinalAnualGrade;
 
-    private String teachersStudentFirstName;
-    private String teachersStudentMidlleName;
-    private String teachersStudentLastName;
+    private String teachersStudentFirstName = "Cadastre um nome";
+    private String teachersStudentMidlleName = " ";
+    private String teachersStudentLastName = " ";
 
     // studentPresent -> Presenças do aluno.
     private int studentPresent;
