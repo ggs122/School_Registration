@@ -142,13 +142,32 @@ public class Student {
     }
 
     public void createStudent(String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
+        Student student1 = new Student();
         boolean studentClassBoolean = studentClass.matches("[0-9]{4}");
-        if (studentClassBoolean == true) {
-            Student student = new Student(staticId++, staticStudentEnrollment++, studentClass, studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase());
-            studentsList.add(student);
+        if (studentClassBoolean == true && student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == false) {
+            Student student2 = new Student(staticId++, staticStudentEnrollment++, studentClass, studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase());
+            studentsList.add(student2);
         } else if (studentClassBoolean == false) {
+            IO.println("--------------------------------------------------------------------------------------------");
             IO.println("Número da turma só aceita 4 dígitos.\nEx: 0000\nNão confere com " + studentClass + " que foi digitado.");
+            IO.println("--------------------------------------------------------------------------------------------");
+        } else if (student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == true) {
+            Locale localeBr = Locale.of("pt", "BR");
+            IO.println("--------------------------------------------------------------------------------------------");
+            IO.println(String.format(localeBr, "O aluno: %s %s %s, já foi cadastrado anteriormente no sistema", studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase()));
+            IO.println("--------------------------------------------------------------------------------------------");
         }
+    }
+
+    private boolean CheckingSpecificName(String studentFirstName, String studentMidlleName, String studentLastName) {
+      boolean booleanEqualsStudentName = studentsList
+                .stream()
+                .anyMatch(s ->
+                                s.studentFirstName.equalsIgnoreCase(studentFirstName) &&
+                                s.studentMidlleName.equalsIgnoreCase(studentMidlleName) &&
+                                s.studentLastName.equalsIgnoreCase(studentLastName)
+                        );
+      return booleanEqualsStudentName;
     }
 
     public void printStudent() {
