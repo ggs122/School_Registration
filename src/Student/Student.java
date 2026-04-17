@@ -7,6 +7,14 @@ import java.util.Objects;
 
 public class Student {
 
+    protected enum Subject {
+        MATEMÁTICA, HISTÓRIA, CIÊNCIAS, GEOGRAFIA, OPÇÃO_INVÁLIDA
+    }
+
+    protected enum GradeType {
+        COMPORTAMENTO, PARTICIPAÇÃO, ATIVIDADES_DE_CASA, TESTE, PROVA, OPÇÃO_INVÁLIDA
+    }
+
     // id -> id do aluno.
     private long id = staticId;
     private static  long staticId = 10000;
@@ -14,6 +22,9 @@ public class Student {
     // studentEnrollment -> Matrícula do aluno.
     private long studentEnrollment = staticStudentEnrollment;
     private static long staticStudentEnrollment = 400;
+
+    private Subject subject;
+    private GradeType gradeType;
 
     private String studentClass;
 
@@ -25,9 +36,9 @@ public class Student {
 
     private double studentFinalAnualGrade;
 
-    private String teachersStudentFirstName = "Cadastre um nome";
-    private String teachersStudentMidlleName = " ";
-    private String teachersStudentLastName = " ";
+    private String teachersStudentFirstName = "Cadastre";
+    private String teachersStudentMidlleName = "um";
+    private String teachersStudentLastName = "nome";
 
     // studentPresent -> Presenças do aluno.
     private int studentPresent;
@@ -37,6 +48,7 @@ public class Student {
     private int studentTardy;
 
     static List<Student> studentsList = new ArrayList<>();
+    static List<Student> studentGradeList = new ArrayList<>();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         this.id = id;
@@ -47,8 +59,10 @@ public class Student {
         this.studentLastName = studentLastName;
     }
 
-    private Student(long studentEnrollment, double studentGrade) {
+    private Student(long studentEnrollment, Subject subject, GradeType gradeType, double studentGrade) {
             this.studentEnrollment = studentEnrollment;
+            this.subject = subject;
+            this.gradeType = gradeType;
             this.studentGrade = studentGrade;
     }
 
@@ -177,6 +191,47 @@ public class Student {
             studentsList
                     .stream()
                     .forEach(s -> IO.println(s));
+        }
+    }
+
+    public void CreateGradeOfStudent(long studentEnrollment, int subject, int gradeType ,double studentGrade) {
+
+      boolean studentEnrollmentFoundBoolean = studentsList
+                .stream()
+                .anyMatch(s -> s.studentEnrollment == studentEnrollment);
+
+      if (studentEnrollmentFoundBoolean == true) {
+          Student student = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
+          studentGradeList.add(student);
+
+          for (var s : studentsList) {
+              if (s.studentEnrollment == studentEnrollment) {
+                  Locale localeBr = Locale.of("pt", "BR");
+                  for (var sg : studentGradeList) {
+                      IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
+                      IO.println(String.format(localeBr, "Nota: %.1f | Matéria: %s | Ativiade: %s -> adicionado a matrícula Nº: %d, do aluno: %s %s %s, com seucesso!", sg.studentGrade, sg.subject, sg.gradeType, s.studentEnrollment, s.getStudentFirstName(), s.getStudentMidlleName(), s.getStudentLastName()));
+                      IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
+                  }
+              }
+          }
+
+      } else if (studentEnrollmentFoundBoolean == false){
+          Locale localeBr = Locale.of("pt", "BR");
+          IO.println("------------------------------------------------------------------------------------------------------");
+          IO.println(String.format(localeBr, "Matrícula Nº %d, inexistente e por isso não é possível adicionar a nota %.2f do aluno.", studentEnrollment, studentGrade));
+          IO.println("------------------------------------------------------------------------------------------------------");
+      }
+    }
+
+    public void printGradeList() {
+        if (!studentGradeList.isEmpty()) {
+            Locale localeBr = Locale.of("pt", "BR");
+            IO.println("----------------------------------------------------------------------------");
+            IO.println("Lista de notas de todos os alunos:");
+            studentGradeList
+                    .stream()
+                    .forEach(s -> IO.println(String.format(localeBr, "Matrícula %d | Matéria: %-15s | Atividade: %-15s | Nota: %.1f", s.studentEnrollment, s.subject, s.gradeType, s.studentGrade)));
+            IO.println("----------------------------------------------------------------------------");
         }
     }
 
