@@ -201,19 +201,23 @@ public class Student {
                 .anyMatch(s -> s.studentEnrollment == studentEnrollment);
 
       if (studentEnrollmentFoundBoolean == true) {
-          Student student = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
-          studentGradeList.add(student);
+          Student newGrade = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
+          studentGradeList.add(newGrade);
 
-          for (var s : studentsList) {
-              if (s.studentEnrollment == studentEnrollment) {
-                  Locale localeBr = Locale.of("pt", "BR");
-                  for (var sg : studentGradeList) {
-                      IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
-                      IO.println(String.format(localeBr, "Nota: %.1f | Matéria: %s | Ativiade: %s -> adicionado a matrícula Nº: %d, do aluno: %s %s %s, com seucesso!", sg.studentGrade, sg.subject, sg.gradeType, s.studentEnrollment, s.getStudentFirstName(), s.getStudentMidlleName(), s.getStudentLastName()));
-                      IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
-                  }
-              }
-          }
+          IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
+          Locale localeBr = Locale.of("pt", "BR");
+          studentsList
+                  .stream()
+                  .filter(s -> s.studentEnrollment == studentEnrollment)
+                  .findFirst()
+                  .ifPresent(s ->
+                          IO.println(
+                                  String.format(localeBr, "Aluno: %s %s %s\nMatrícula Nº: %d", s.getStudentFirstName(), s.getStudentMidlleName(), s.getStudentLastName(), s.studentEnrollment)
+                          ));
+
+          IO.println(String.format(localeBr, "Nota: %.1f | Atividade: %s | Matéria: %s -> Adicionado ao aluno com sucesso!!!", newGrade.studentGrade, newGrade.gradeType, newGrade.subject));
+
+          IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
 
       } else if (studentEnrollmentFoundBoolean == false){
           Locale localeBr = Locale.of("pt", "BR");
@@ -230,9 +234,24 @@ public class Student {
             IO.println("Lista de notas de todos os alunos:");
             studentGradeList
                     .stream()
-                    .forEach(s -> IO.println(String.format(localeBr, "Matrícula %d | Matéria: %-15s | Atividade: %-15s | Nota: %.1f", s.studentEnrollment, s.subject, s.gradeType, s.studentGrade)));
+                    .forEach(s -> IO.println(String.format(localeBr, "Matrícula %d | Matéria: %-15s | Atividade: %-20s | Nota: %.1f", s.studentEnrollment, s.subject, s.gradeType, s.studentGrade)));
             IO.println("----------------------------------------------------------------------------");
         }
+    }
+
+    public double returnAvgOfStudent(long studentEnrollment) {
+        Locale localeBr = Locale.of("pt", "BR");
+        double rawAvg = 0.0;
+
+      double sumGradesOfStudent = studentGradeList
+                .stream()
+                .filter(s -> s.studentEnrollment == s.studentEnrollment)
+                .mapToDouble(s -> s.studentGrade)
+                .sum();
+      rawAvg = sumGradesOfStudent / 3;
+     double localStudentAvg = Math.floor(rawAvg * 10) / 10;
+        IO.println(String.format(localeBr, "Média do Bimestre: %.1f", localStudentAvg));
+      return localStudentAvg;
     }
 
     @Override
