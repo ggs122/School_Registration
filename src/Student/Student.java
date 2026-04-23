@@ -34,6 +34,8 @@ public class Student {
     private double studentGrade;
     private double studentAvgQuarter;
 
+    private double studentBimonthlyAvg;
+
     private double studentFinalAnualGrade;
 
     private String teachersStudentFirstName = "Cadastre";
@@ -49,6 +51,7 @@ public class Student {
 
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();
+    static List<Student> studentBimonthlyAvgList = new ArrayList<>();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         this.id = id;
@@ -66,10 +69,9 @@ public class Student {
             this.studentGrade = studentGrade;
     }
 
-    private Student(long id, long studentEnrollment, double studentAvgQuarter) {
-        this.id = id;
+    private Student(long studentEnrollment, double studentBimonthlyAvg) {
         this.studentEnrollment = studentEnrollment;
-        this.studentAvgQuarter = studentAvgQuarter;
+        this.studentBimonthlyAvg = studentBimonthlyAvg;
     }
 
     private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName) {
@@ -203,6 +205,10 @@ public class Student {
       if (studentEnrollmentFoundBoolean == true) {
           Student newGrade = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
           studentGradeList.add(newGrade);
+         long countGrades = studentGradeList
+                  .stream()
+                          .filter(s -> s.studentEnrollment == studentEnrollment)
+                                  .count();
 
           IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
           Locale localeBr = Locale.of("pt", "BR");
@@ -215,9 +221,13 @@ public class Student {
                                   String.format(localeBr, "Aluno: %s %s %s\nMatrícula Nº: %d", s.getStudentFirstName(), s.getStudentMidlleName(), s.getStudentLastName(), s.studentEnrollment)
                           ));
 
-          IO.println(String.format(localeBr, "Nota: %.1f | Atividade: %s | Matéria: %s -> Adicionado ao aluno com sucesso!!!", newGrade.studentGrade, newGrade.gradeType, newGrade.subject));
-
+          IO.println(String.format(localeBr, "Nota: %.1f | Atividade: %s | Matéria: %s", newGrade.studentGrade, newGrade.gradeType, newGrade.subject));
           IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
+          if (countGrades == 5) {
+              createBimonthlyAvgOfStudent(studentEnrollment);
+              IO.println(">>> Sistema: 5 notas atingidas. Média bimestral gerada com sucesso!");
+              IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
+          }
 
       } else if (studentEnrollmentFoundBoolean == false){
           Locale localeBr = Locale.of("pt", "BR");
@@ -239,10 +249,22 @@ public class Student {
         }
     }
 
-    public double returnAvgOfStudent(long studentEnrollment) {
-        Locale localeBr = Locale.of("pt", "BR");
-        double rawAvg = 0.0;
+    public void printStudentBimonthlyAvg(long studentEnrollment) {
+        if (!studentBimonthlyAvgList.isEmpty()) {
+            IO.println("--------------------------------------------");
+            Locale localeBr = Locale.of("pt", "BR");
+            studentBimonthlyAvgList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment)
+                    .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Média Bimestral: %.1f", s.studentEnrollment, s.studentBimonthlyAvg)));
+            IO.println("---------------------------------------------");
+        } else if (studentBimonthlyAvgList.isEmpty()) {
+            IO.println("Não foi criada a média do aluno, por favor, crie a média antes de mostra na tela.");
+        }
+    }
 
+    private void createBimonthlyAvgOfStudent(long studentEnrollment) {
+        double rawAvg = 0.0;
       double sumGradesOfStudent = studentGradeList
                 .stream()
                 .filter(s -> s.studentEnrollment == s.studentEnrollment)
@@ -250,8 +272,14 @@ public class Student {
                 .sum();
       rawAvg = sumGradesOfStudent / 3;
      double localStudentAvg = Math.floor(rawAvg * 10) / 10;
-        IO.println(String.format(localeBr, "Média do Bimestre: %.1f", localStudentAvg));
-      return localStudentAvg;
+        for (var s :studentGradeList) {
+            if (s.studentEnrollment == studentEnrollment) {
+                Student studentBimonthlyAvg = new Student(studentEnrollment, localStudentAvg);
+                studentBimonthlyAvgList.add(studentBimonthlyAvg);
+                studentGradeList.removeIf(st -> st.studentEnrollment == studentEnrollment);
+                return;
+            }
+        }
     }
 
     @Override

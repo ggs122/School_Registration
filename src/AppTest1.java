@@ -14,8 +14,17 @@ public class AppTest1 {
         student1.CreateGradeOfStudent(400, 1, 3, 7.5);
         student1.CreateGradeOfStudent(400, 1, 4, 8);
         student1.CreateGradeOfStudent(400, 1, 5, 5.5);
+        student1.printStudentBimonthlyAvg(400);
+
+        student1.CreateGradeOfStudent(400, 1, 1, 10);
+        student1.CreateGradeOfStudent(400, 1, 2, 10);
+        student1.CreateGradeOfStudent(400, 1, 3, 10);
+        student1.CreateGradeOfStudent(400, 1, 4, 10);
+        student1.CreateGradeOfStudent(400, 1, 5, 10);
         student1.printGradeList();
-        System.out.println(student1.returnAvgOfStudent(400));
+        student1.printStudentBimonthlyAvg(400);
+
+//        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
 
 //        Student student2 = new Student();
 //        student2.createStudent("1504", "Igor", "Melo", "de Oliveira");
