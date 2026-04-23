@@ -51,6 +51,7 @@ public class Student {
 
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();
+    static List<Student> studentOldGradeList = new ArrayList<>();
     static List<Student> studentBimonthlyAvgList = new ArrayList<>();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
@@ -205,6 +206,7 @@ public class Student {
       if (studentEnrollmentFoundBoolean == true) {
           Student newGrade = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
           studentGradeList.add(newGrade);
+          studentOldGradeList.add(newGrade);
          long countGrades = studentGradeList
                   .stream()
                           .filter(s -> s.studentEnrollment == studentEnrollment)
@@ -238,11 +240,17 @@ public class Student {
     }
 
     public void printGradeList() {
-        if (!studentGradeList.isEmpty()) {
+        if (!studentOldGradeList.isEmpty()) {
+
+           long gradeListLimit = studentOldGradeList
+                    .stream()
+                    .count();
+
             Locale localeBr = Locale.of("pt", "BR");
             IO.println("----------------------------------------------------------------------------");
             IO.println("Lista de notas de todos os alunos:");
-            studentGradeList
+
+            studentOldGradeList
                     .stream()
                     .forEach(s -> IO.println(String.format(localeBr, "Matrícula %d | Matéria: %-15s | Atividade: %-20s | Nota: %.1f", s.studentEnrollment, s.subject, s.gradeType, s.studentGrade)));
             IO.println("----------------------------------------------------------------------------");

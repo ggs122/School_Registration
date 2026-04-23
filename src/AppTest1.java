@@ -21,8 +21,8 @@ public class AppTest1 {
         student1.CreateGradeOfStudent(400, 1, 3, 10);
         student1.CreateGradeOfStudent(400, 1, 4, 10);
         student1.CreateGradeOfStudent(400, 1, 5, 10);
-        student1.printGradeList();
         student1.printStudentBimonthlyAvg(400);
+        student1.printGradeList();
 
 //        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
 
