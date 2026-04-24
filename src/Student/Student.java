@@ -34,6 +34,8 @@ public class Student {
     private double studentGrade;
     private double studentAvgQuarter;
 
+
+    private int bimonthly;
     private double studentBimonthlyAvg;
 
     private double studentFinalAnualGrade;
@@ -63,8 +65,9 @@ public class Student {
         this.studentLastName = studentLastName;
     }
 
-    private Student(long studentEnrollment, Subject subject, GradeType gradeType, double studentGrade) {
+    private Student(long studentEnrollment, int bimonthly, Subject subject, GradeType gradeType, double studentGrade) {
             this.studentEnrollment = studentEnrollment;
+            this.bimonthly = bimonthly;
             this.subject = subject;
             this.gradeType = gradeType;
             this.studentGrade = studentGrade;
@@ -197,14 +200,14 @@ public class Student {
         }
     }
 
-    public void CreateGradeOfStudent(long studentEnrollment, int subject, int gradeType ,double studentGrade) {
+    public void CreateGradeOfStudent(long studentEnrollment, int bimonthly, int subject, int gradeType ,double studentGrade) {
 
       boolean studentEnrollmentFoundBoolean = studentsList
                 .stream()
                 .anyMatch(s -> s.studentEnrollment == studentEnrollment);
 
       if (studentEnrollmentFoundBoolean == true) {
-          Student newGrade = new Student(studentEnrollment, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
+          Student newGrade = new Student(studentEnrollment, bimonthly, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
           studentGradeList.add(newGrade);
           studentOldGradeList.add(newGrade);
          long countGrades = studentGradeList
@@ -256,6 +259,65 @@ public class Student {
             IO.println("----------------------------------------------------------------------------");
         }
     }
+
+    public void printStudentSpecificGradeList(long studentEnrollment, int bimonthly) {
+        IO.println("----------------------------------------------------------------------");
+        Locale localeBr = Locale.of("pt", "BR");
+        if (!studentsList.isEmpty() && !studentOldGradeList.isEmpty()) {
+            IO.println("Dados do aluno:");
+            IO.println();
+            studentsList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment)
+                    .forEach(s -> IO.println(String.format(localeBr,"Matrícula: %d\nTurma:     %s\nNome:      %s %s %s", s.studentEnrollment, s.studentClass, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+            IO.println();
+
+       var selectedSubject = studentOldGradeList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment)
+                    .map(s -> s.subject)
+                    .distinct()
+                    .toList();
+
+       selectedSubject
+               .stream()
+                       .forEach(s -> IO.println(String.format(localeBr, "Matéria: %s", s)));
+       IO.println();
+
+      var distinctList = studentOldGradeList
+               .stream()
+                       .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthly == bimonthly)
+                               .map(s -> bimonthly)
+                                       .distinct()
+                                               .toList();
+      IO.println();
+
+      distinctList
+              .stream()
+                      .forEach(s -> IO.println(String.format(localeBr, "Bimestre: %dº ", s)));
+
+IO.println();
+
+       IO.println("Notas:");
+
+            studentOldGradeList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthly == bimonthly)
+                    .forEach(s -> IO.println(String.format(localeBr, "Atividade: %-20s | Nota: %.1f ", s.gradeType, s.studentGrade)));
+
+            double rawAvg = 0.0;
+            double sumGradesOfStudent = studentOldGradeList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == s.studentEnrollment && s.bimonthly == bimonthly)
+                    .mapToDouble(s -> s.studentGrade)
+                    .sum();
+            rawAvg = sumGradesOfStudent / 3;
+            double localStudentAvg = Math.floor(rawAvg * 10) / 10;
+            IO.println(String.format(localeBr, "Média: %.1f", localStudentAvg));
+            IO.println("----------------------------------------------------------------------");
+        }
+    }
+
 
     public void printStudentBimonthlyAvg(long studentEnrollment) {
         if (!studentBimonthlyAvgList.isEmpty()) {

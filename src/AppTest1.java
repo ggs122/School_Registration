@@ -9,20 +9,22 @@ public class AppTest1 {
 
         Student student1 = new Student();
         student1.createStudent("1504", "Romualdo", "Ferreira", "da Silva");
-        student1.CreateGradeOfStudent(400, 1, 1, 3.5);
-        student1.CreateGradeOfStudent(400, 1, 2, 6);
-        student1.CreateGradeOfStudent(400, 1, 3, 7.5);
-        student1.CreateGradeOfStudent(400, 1, 4, 8);
-        student1.CreateGradeOfStudent(400, 1, 5, 5.5);
+        student1.CreateGradeOfStudent(400, 1, 1, 1, 3.5);
+        student1.CreateGradeOfStudent(400, 1, 1, 2, 6);
+        student1.CreateGradeOfStudent(400, 1, 1, 3, 7.5);
+        student1.CreateGradeOfStudent(400, 1, 1, 4, 8);
+        student1.CreateGradeOfStudent(400, 1, 1, 5, 5.5);
         student1.printStudentBimonthlyAvg(400);
 
-        student1.CreateGradeOfStudent(400, 1, 1, 10);
-        student1.CreateGradeOfStudent(400, 1, 2, 10);
-        student1.CreateGradeOfStudent(400, 1, 3, 10);
-        student1.CreateGradeOfStudent(400, 1, 4, 10);
-        student1.CreateGradeOfStudent(400, 1, 5, 10);
+        student1.CreateGradeOfStudent(400, 2, 1, 1, 10);
+        student1.CreateGradeOfStudent(400, 2, 1, 2, 10);
+        student1.CreateGradeOfStudent(400, 2, 1, 3, 10);
+        student1.CreateGradeOfStudent(400, 2, 1, 4, 10);
+        student1.CreateGradeOfStudent(400, 2, 1, 5, 10);
         student1.printStudentBimonthlyAvg(400);
-        student1.printGradeList();
+//        student1.printGradeList();
+
+        student1.printStudentSpecificGradeList(400, 1);
 
 //        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
 
@@ -32,8 +34,8 @@ public class AppTest1 {
 //        student2.CreateGradeOfStudent(401, 2, 2, 6);
 //        student2.printGradeList();
 
-        Student student3 = new Student();
-        student3.printStudent();
+//        Student student3 = new Student();
+//        student3.printStudent();
 
         Student student4 = new Student();
         student4.createStudent("1504", "Igor", "Melo", "de Oliveira");
