@@ -320,6 +320,50 @@ IO.println();
         }
     }
 
+    public void printSTudentSpecificGradeForEnrollMent(long studentEnrollment) {
+        Locale localeBr = Locale.of("pt", "BR");
+        studentsList
+                .stream()
+                .filter(s -> s.studentEnrollment  == studentEnrollment)
+                .distinct()
+                .forEach(s -> IO.println(String.format(localeBr,"Matrícula: %d\nTurma:     %s\nNome:      %s %s %s", s.studentEnrollment, s.studentClass, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+        IO.println();
+       var bimonthlyList = studentOldGradeList
+                .stream()
+                        .filter(s -> s.studentEnrollment == studentEnrollment)
+                                .map(s -> s.bimonthly)
+                                        .distinct()
+                                        .toList();
+
+       for (var b : bimonthlyList) {
+           IO.println(String.format(localeBr, "Bimestre: %dº", b));
+
+          var gradeBimonthly = studentOldGradeList
+                   .stream()
+                   .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthly == b)
+                   .toList();
+
+          gradeBimonthly
+                  .forEach(g ->
+                          IO.println(String.format(localeBr, "Atividade: %-20s | Nota: %.1f ", g.gradeType, g.studentGrade))
+                          );
+
+          if (gradeBimonthly.size() == 5) {
+              double sumGrades = gradeBimonthly
+                      .stream()
+                      .mapToDouble(s -> s.studentGrade)
+                      .sum();
+
+              double calculateAvg = sumGrades / 3;
+
+              double finalAvg = Math.floor(calculateAvg * 10) /10;
+
+              IO.println(String.format(localeBr, "Média: %.1f", finalAvg));
+              IO.println();
+          }
+
+           }
+       }
 
     public void printStudentBimonthlyAvg(long studentEnrollment) {
         if (!studentBimonthlyAvgList.isEmpty()) {
