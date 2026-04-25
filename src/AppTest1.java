@@ -24,7 +24,8 @@ public class AppTest1 {
         student1.printStudentBimonthlyAvg(400);
 //        student1.printGradeList();
 
-        student1.printStudentSpecificGradeList(400, 1);
+        student1.printStudentSpecificGradeListForStudentEnrollmentAndBiomonthly(400, 1);
+        student1.printStudentSpecificGradeListForStudentName("Romualdo", "Ferreira", "da SIlva", 400);
 
 //        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
 

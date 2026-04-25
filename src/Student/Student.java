@@ -260,7 +260,7 @@ public class Student {
         }
     }
 
-    public void printStudentSpecificGradeList(long studentEnrollment, int bimonthly) {
+    public void printStudentSpecificGradeListForStudentEnrollmentAndBiomonthly(long studentEnrollment, int bimonthly) {
         IO.println("----------------------------------------------------------------------");
         Locale localeBr = Locale.of("pt", "BR");
         if (!studentsList.isEmpty() && !studentOldGradeList.isEmpty()) {
@@ -315,6 +315,8 @@ IO.println();
             double localStudentAvg = Math.floor(rawAvg * 10) / 10;
             IO.println(String.format(localeBr, "Média: %.1f", localStudentAvg));
             IO.println("----------------------------------------------------------------------");
+        } else if(studentsList.isEmpty() && studentOldGradeList.isEmpty()) {
+            IO.println("Estudantes não cadastrados ou notas não cadastradas.");
         }
     }
 
