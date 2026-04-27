@@ -36,6 +36,8 @@ public class Student {
 
 
     private int bimonthly;
+    private int bimonthlyAvg;
+    private Subject subjectBimonthlyAvg;
     private double studentBimonthlyAvg;
 
     private double studentFinalAnualGrade;
@@ -73,8 +75,9 @@ public class Student {
             this.studentGrade = studentGrade;
     }
 
-    private Student(long studentEnrollment, double studentBimonthlyAvg) {
+    private Student(long studentEnrollment, Subject subject, int bimonthlyAvg, double studentBimonthlyAvg) {
         this.studentEnrollment = studentEnrollment;
+        this.bimonthlyAvg = bimonthlyAvg;
         this.studentBimonthlyAvg = studentBimonthlyAvg;
     }
 
@@ -229,7 +232,7 @@ public class Student {
           IO.println(String.format(localeBr, "Nota: %.1f | Atividade: %s | Matéria: %s", newGrade.studentGrade, newGrade.gradeType, newGrade.subject));
           IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
           if (countGrades == 5) {
-              createBimonthlyAvgOfStudent(studentEnrollment);
+              createBimonthlyAvgOfStudent(studentEnrollment, subject, bimonthly);
               IO.println(">>> Sistema: 5 notas atingidas. Média bimestral gerada com sucesso!");
               IO.println("--------------------------------------------------------------------------------------------------------------------------------------------------");
           }
@@ -365,21 +368,47 @@ IO.println();
            }
        }
 
-    public void printStudentBimonthlyAvg(long studentEnrollment) {
-        if (!studentBimonthlyAvgList.isEmpty()) {
+       //Fixme concertar para imprimir as médias da matéria especifica.
+    public void printStudentBimonthlyAvg(long studentEnrollment, int subject) {
+        if (!studentBimonthlyAvgList.isEmpty() && !studentsList.isEmpty()) {
             IO.println("--------------------------------------------");
             Locale localeBr = Locale.of("pt", "BR");
+
+            IO.println("Dados do aluno:");
+            IO.println();
+            studentsList
+                    .stream()
+                            .filter(s -> s.studentEnrollment == studentEnrollment)
+                                    .forEach(s -> IO.println(String.format(localeBr, "Turma: %s\nMatrícula: %d\nAluno: %s %s %s ", s.studentClass, s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+            IO.println();
+
+//            studentBimonthlyAvgList
+//                    .stream()
+//                            .filter(s ->)
+
             studentBimonthlyAvgList
                     .stream()
-                    .filter(s -> s.studentEnrollment == studentEnrollment)
-                    .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Média Bimestral: %.1f", s.studentEnrollment, s.studentBimonthlyAvg)));
+                    .filter(s -> s.studentEnrollment == studentEnrollment && s.subject == StudentUtils.returnSubject(subject))
+                    .forEach(s -> IO.println(String.format(localeBr, "%dº Bimestre | Média: %.1f", s.bimonthlyAvg, s.studentBimonthlyAvg)));
+
+            double bimonthlySum = studentBimonthlyAvgList
+                    .stream()
+                            .filter(s -> s.studentEnrollment == studentEnrollment)
+                                    .mapToDouble(s -> s.studentBimonthlyAvg)
+                                            .sum();
+
+            double bimonthlyAvg = bimonthlySum / 4;
+            double localBimonthlyAvg = Math.floor(bimonthlyAvg * 10) / 10;
+
+            IO.println(String.format(localeBr, "Média final: %.1f ", localBimonthlyAvg));
+
             IO.println("---------------------------------------------");
         } else if (studentBimonthlyAvgList.isEmpty()) {
             IO.println("Não foi criada a média do aluno, por favor, crie a média antes de mostra na tela.");
         }
     }
 
-    private void createBimonthlyAvgOfStudent(long studentEnrollment) {
+    private void createBimonthlyAvgOfStudent(long studentEnrollment, int subject, int bimonthlyAvg) {
         double rawAvg = 0.0;
       double sumGradesOfStudent = studentGradeList
                 .stream()
@@ -390,7 +419,7 @@ IO.println();
      double localStudentAvg = Math.floor(rawAvg * 10) / 10;
         for (var s :studentGradeList) {
             if (s.studentEnrollment == studentEnrollment) {
-                Student studentBimonthlyAvg = new Student(studentEnrollment, localStudentAvg);
+                Student studentBimonthlyAvg = new Student(studentEnrollment, StudentUtils.returnSubject(subject), bimonthlyAvg, localStudentAvg);
                 studentBimonthlyAvgList.add(studentBimonthlyAvg);
                 studentGradeList.removeIf(st -> st.studentEnrollment == studentEnrollment);
                 return;
