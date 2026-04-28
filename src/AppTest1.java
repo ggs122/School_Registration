@@ -35,11 +35,13 @@ public class AppTest1 {
         student1.CreateGradeOfStudent(400, 4, 1, 3, 4.5);
         student1.CreateGradeOfStudent(400, 4, 1, 4, 7.5);
         student1.CreateGradeOfStudent(400, 4, 1, 5, 3.5);
-        student1.printStudentBimonthlyAvg(400, 1);
+        student1.printStudentBimonthlyAvgForSubject(400, 1);
 //        student1.printGradeList();
 
         student1.printStudentSpecificGradeListForStudentEnrollmentAndBiomonthly(400, 1);
-        student1.printSTudentSpecificGradeForEnrollMent(400);
+        student1.printSTudentSpecificGradeForEnrollMentAndSubject(400, 1);
+
+
 
 //        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
 

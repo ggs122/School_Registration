@@ -6,8 +6,8 @@ public final class StudentUtils {
 
 
 //    static void main(String[] args) {
-////        System.out.println(StudentUtils.returnSubject(1));
-//        System.out.println(StudentUtils.returnGradeType(-1));
+//        System.out.println(StudentUtils.returnSubject(1));
+////        System.out.println(StudentUtils.returnGradeType(-1));
 //    }
 
     protected StudentUtils() {
