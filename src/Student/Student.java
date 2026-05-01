@@ -166,17 +166,20 @@ public class Student {
     }
 
     public void createStudent(String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
+        Locale localeBr = Locale.of("pt", "BR");
         Student student1 = new Student();
         boolean studentClassBoolean = studentClass.matches("[0-9]{4}");
         if (studentClassBoolean == true && student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == false) {
             Student student2 = new Student(staticId++, staticStudentEnrollment++, studentClass, studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase());
             studentsList.add(student2);
+            IO.println("--------------------------------------------------------------------------------------------");
+            IO.println(String.format("Aluno %s %s %s, criado com sucesso!", student2.studentFirstName, student2.studentMidlleName, student2.studentLastName));
+            IO.println("--------------------------------------------------------------------------------------------");
         } else if (studentClassBoolean == false) {
             IO.println("--------------------------------------------------------------------------------------------");
             IO.println("Número da turma só aceita 4 dígitos.\nEx: 0000\nNão confere com " + studentClass + " que foi digitado.");
             IO.println("--------------------------------------------------------------------------------------------");
         } else if (student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == true) {
-            Locale localeBr = Locale.of("pt", "BR");
             IO.println("--------------------------------------------------------------------------------------------");
             IO.println(String.format(localeBr, "O aluno: %s %s %s, já foi cadastrado anteriormente no sistema", studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase()));
             IO.println("--------------------------------------------------------------------------------------------");
@@ -210,7 +213,7 @@ public class Student {
                 .stream()
                 .anyMatch(s -> s.studentEnrollment == studentEnrollment);
 
-      if (studentEnrollmentFoundBoolean == true) {
+      if (studentEnrollmentFoundBoolean == true && checkingGradeOfStudent(studentEnrollment, bimonthly, subject, gradeType) == false) {
           Student newGrade = new Student(studentEnrollment, bimonthly, StudentUtils.returnSubject(subject), StudentUtils.returnGradeType(gradeType), studentGrade);
           studentGradeList.add(newGrade);
           studentOldGradeList.add(newGrade);
@@ -262,6 +265,31 @@ public class Student {
                     .forEach(s -> IO.println(String.format(localeBr, "Matrícula %d | Matéria: %-15s | Atividade: %-20s | Nota: %.1f", s.studentEnrollment, s.subject, s.gradeType, s.studentGrade)));
             IO.println("----------------------------------------------------------------------------");
         }
+    }
+
+    private boolean checkingGradeOfStudent(long studentEnrollment, int bimonthly, int subject,  int gradeType) {
+        Locale localeBr = Locale.of("pt", "BR");
+       boolean checkingGradeType = studentOldGradeList
+                .stream()
+                .anyMatch(s -> s.studentEnrollment == studentEnrollment &&
+                        s.bimonthly == bimonthly &&
+                        s.subject == StudentUtils.returnSubject(subject) &&
+                        s.gradeType == StudentUtils.returnGradeType(gradeType));
+
+       if (checkingGradeType == true) {
+           for (var s : studentOldGradeList) {
+               if (s.studentEnrollment == studentEnrollment && s.bimonthly == bimonthly && s.subject == StudentUtils.returnSubject(subject) && s.gradeType == StudentUtils.returnGradeType(gradeType)) {
+                   IO.println("------------------------------------------------------------------------------------------------------------------");
+                   IO.println(String.format(localeBr, "Atividade: %s | Bimestre: %dº |Matéria: %s -> já cadastrada anteriormente na matrícula: %d", s.gradeType, s.bimonthly, s.subject, s.studentEnrollment));
+                   IO.println("------------------------------------------------------------------------------------------------------------------");
+               }
+           }
+       } else if (checkingGradeType == false) {
+           IO.println("---------------------------------------------------------------------------------------");
+           IO.println("Nota cadastrada com sucesso!");
+           IO.println("---------------------------------------------------------------------------------------");
+       }
+        return checkingGradeType;
     }
 
     public void printStudentSpecificGradeListForStudentEnrollmentAndBiomonthly(long studentEnrollment, int bimonthly) {
@@ -325,84 +353,71 @@ IO.println();
     }
 
     public void printSTudentSpecificGradeForEnrollMentAndSubject(long studentEnrollment, int subject) {
-        IO.println("-------------------------------------------------------");
-        IO.println("MÉDIA GERAL DETALHADA POR MATÉRIA");
-        IO.println();
         Locale localeBr = Locale.of("pt", "BR");
-        studentsList
-                .stream()
-                .filter(s -> s.studentEnrollment  == studentEnrollment)
-                .distinct()
-                .forEach(s -> IO.println(String.format(localeBr,"Matrícula: %d\nTurma:     %s\nNome:      %s %s %s", s.studentEnrollment, s.studentClass, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
-        IO.println();
-       var bimonthlyList = studentOldGradeList
-                .stream()
-                        .filter(s -> s.studentEnrollment == studentEnrollment && s.subject == StudentUtils.returnSubject(subject))
-                                .map(s -> s.bimonthly)
-                                        .distinct()
-                                        .toList();
-
-      var subjectChoosed = studentOldGradeList
-               .stream()
-               .filter(s -> s.studentEnrollment == studentEnrollment && s.subject == StudentUtils.returnSubject(subject))
-               .map(s -> s.subject)
-               .distinct()
-               .toList();
-
-      subjectChoosed
-              .stream()
-              .forEach(s -> IO.println(String.format(localeBr, "Matéria: %s", s)));
-      IO.println();
-       for (var b : bimonthlyList) {
-           IO.println(String.format(localeBr, "Bimestre: %dº", b));
-
-          var gradeBimonthly = studentOldGradeList
-                   .stream()
-                   .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthly == b && s.subject == StudentUtils.returnSubject(subject))
-                   .toList();
-
-          gradeBimonthly
-                  .forEach(g ->
-                          IO.println(String.format(localeBr, "Atividade: %-20s | Nota: %.1f ", g.gradeType, g.studentGrade))
-                          );
-
-          if (gradeBimonthly.size() == 5) {
-              double sumGrades = gradeBimonthly
-                      .stream()
-                      .mapToDouble(s -> s.studentGrade)
-                      .sum();
-
-              double calculateAvg = sumGrades / 3;
-
-              double finalAvg = Math.floor(calculateAvg * 10) /10;
-              IO.println();
-              IO.println(String.format(localeBr, "Média: %.1f", finalAvg));
-              IO.println();
-              IO.println();
-
-//             double bimonthlySumed = studentBimonthlyAvgList
-//                      .stream()
-//                      .filter(s -> s.studentEnrollment == studentEnrollment && s.subjectBimonthlyAvg == StudentUtils.returnSubject(subject))
-//                      .mapToDouble(s -> s.studentBimonthlyAvg)
-//                      .sum();
-//
-//             double localFinalCalculateAvg = bimonthlySumed / 4;
-//             double localFinalAvg = Math.floor(localFinalCalculateAvg *10) / 10;
-//
-//             IO.println(String.format(localeBr, "Média final: %.1f", localFinalAvg));
-//             IO.println();
-//             if (localFinalAvg >= 6.0) {
-//                 IO.println("APROVADO!");
-//             } else if (localFinalAvg <= 6.0) {
-//                 IO.println("REPROVADO!");
-//             }
-          }
-
-           }
         IO.println("-------------------------------------------------------");
+        if (!studentsList.isEmpty() && !studentOldGradeList.isEmpty()) {
+            IO.println("MÉDIA GERAL DETALHADA POR MATÉRIA");
+            IO.println();
+            studentsList
+                    .stream()
+                    .filter(s -> s.studentEnrollment  == studentEnrollment)
+                    .distinct()
+                    .forEach(s -> IO.println(String.format(localeBr,"Matrícula: %d\nTurma:     %s\nNome:      %s %s %s", s.studentEnrollment, s.studentClass, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+            IO.println();
+            var bimonthlyList = studentOldGradeList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment && s.subject == StudentUtils.returnSubject(subject))
+                    .map(s -> s.bimonthly)
+                    .distinct()
+                    .toList();
+
+            var subjectChoosed = studentOldGradeList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment && s.subject == StudentUtils.returnSubject(subject))
+                    .map(s -> s.subject)
+                    .distinct()
+                    .toList();
+
+            subjectChoosed
+                    .stream()
+                    .forEach(s -> IO.println(String.format(localeBr, "Matéria: %s", s)));
+            IO.println();
+            for (var b : bimonthlyList) {
+                IO.println(String.format(localeBr, "Bimestre: %dº", b));
+
+                var gradeBimonthly = studentOldGradeList
+                        .stream()
+                        .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthly == b && s.subject == StudentUtils.returnSubject(subject))
+                        .toList();
+
+                gradeBimonthly
+                        .forEach(g ->
+                                IO.println(String.format(localeBr, "Atividade: %-20s | Nota: %.1f ", g.gradeType, g.studentGrade))
+                        );
+
+                if (gradeBimonthly.size() == 5) {
+                    double sumGrades = gradeBimonthly
+                            .stream()
+                            .mapToDouble(s -> s.studentGrade)
+                            .sum();
+
+                    double calculateAvg = sumGrades / 3;
+
+                    double finalAvg = Math.floor(calculateAvg * 10) /10;
+                    IO.println();
+                    IO.println(String.format(localeBr, "Média: %.1f", finalAvg));
+                    IO.println();
+                    IO.println();
+                }
+
+            }
+            IO.println("-------------------------------------------------------");
+        } else if (studentsList.isEmpty() && studentOldGradeList.isEmpty()) {
+            IO.println("Sem estudantes e notas cadastrados, impossível mostrar na tela.");
+        }
+
        }
 
-       //Fixme -> Nome do antigo método printStudentBimonthlyAvg.
     public void printStudentBimonthlyAvgForSubject(long studentEnrollment, int subject) {
         if (!studentBimonthlyAvgList.isEmpty() && !studentsList.isEmpty()) {
             IO.println("--------------------------------------------");

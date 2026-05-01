@@ -6,7 +6,9 @@ public final class StudentUtils {
 
 
 //    static void main(String[] args) {
-//        System.out.println(StudentUtils.returnSubject(1));
+//        System.out.println(StudentUtils.returnBimonthly(4));
+//
+////        System.out.println(StudentUtils.returnSubject(1));
 ////        System.out.println(StudentUtils.returnGradeType(-1));
 //    }
 
@@ -34,5 +36,15 @@ public final class StudentUtils {
             default -> GradeType.OPÇÃO_INVÁLIDA;
         };
         return gradeTypeReturned;
+    }
+
+    public static int returnBimonthly(int bimonthly) {
+        return switch (bimonthly) {
+            case 1 -> 1;
+            case 2 -> 2;
+            case 3 -> 3;
+            case 4 -> 4;
+            default -> 0;
+        };
     }
 }
