@@ -1,5 +1,8 @@
 package Student;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +53,10 @@ public class Student {
     private int studentPresent;
     // studentAbsent -> Faltas do aluno.
     private int studentAbsent;
+
+    private int bimonthlyPresentOrAbsent;
+
+    private LocalDate dateOfPresentOrAbsent;
     // tardy -> atrasos do aluno.
     private int studentTardy;
 
@@ -57,6 +64,7 @@ public class Student {
     static List<Student> studentGradeList = new ArrayList<>();
     static List<Student> studentOldGradeList = new ArrayList<>();
     static List<Student> studentBimonthlyAvgList = new ArrayList<>();
+    static List<Student> studentPresentOrAbsentList = new ArrayList<>();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         this.id = id;
@@ -92,11 +100,12 @@ public class Student {
         this.teachersStudentLastName = teachersStudentLastName;
     }
 
-    private Student(long studentEnrollment, int studentPresent, int studentAbsent, int studentTardy) {
+    private Student(long studentEnrollment, int bimonthlyPresentOrAbsent, LocalDate dateOfPresentOrAbsent, int studentPresent, int studentAbsent) {
         this.studentEnrollment = studentEnrollment;
+        this.bimonthlyPresentOrAbsent = bimonthlyPresentOrAbsent;
+        this.dateOfPresentOrAbsent = dateOfPresentOrAbsent;
         this.studentPresent = studentPresent;
         this.studentAbsent = studentAbsent;
-        this.studentTardy = studentTardy;
     }
 
     public Student() {}
@@ -247,6 +256,40 @@ public class Student {
           IO.println(String.format(localeBr, "Matrícula Nº %d, inexistente e por isso não é possível adicionar a nota %.2f do aluno.", studentEnrollment, studentGrade));
           IO.println("------------------------------------------------------------------------------------------------------");
       }
+    }
+
+    public void createSpecificStudentPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent, String datePresentOrAbsent, int studentPresent, int studentAbsent) {
+       boolean foundStudent = studentsList
+                .stream()
+                .anyMatch(s -> s.studentEnrollment == studentEnrollment);
+
+     boolean foundStudentOldGradeList = studentOldGradeList
+               .stream()
+               .anyMatch(s ->
+                       s.studentEnrollment == studentEnrollment &&
+                               s.studentBimonthlyAvg == bimonthlyPresentOrAbsent
+                       );
+
+     if (foundStudent == true && foundStudentOldGradeList == true) {
+
+         try {
+             LocalDate dateFormated = LocalDate.parse(datePresentOrAbsent, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+             Student student = new Student(studentEnrollment, bimonthlyPresentOrAbsent, dateFormated, studentPresent, studentAbsent);
+             studentPresentOrAbsentList.add(student);
+         } catch (Exception e) {
+             IO.println("Ops! Erro! Data formato inválido");
+         }
+
+     } else if (foundStudent == false && foundStudentOldGradeList == false) {
+         IO.println("Aluno ou notas ou médias ainda não foram cadastrados, verifique!");
+     }
+    }
+
+    public void printSpecificStudentPresentOrAbsent() {
+        Locale localeBr = Locale.of("pt", "BR");
+        studentPresentOrAbsentList
+                .stream()
+                .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %1$d | Bimestre: %2$d | Data: %3$td %3$tA %3$tB %3$tY | Presença: %4$d | Falta: %5$d", s.studentEnrollment, s.bimonthlyPresentOrAbsent, s.dateOfPresentOrAbsent, s.studentPresent, s.studentAbsent)));
     }
 
     public void printGradeList() {

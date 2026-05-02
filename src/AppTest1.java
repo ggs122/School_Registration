@@ -14,6 +14,8 @@ public class AppTest1 {
         student1.CreateGradeOfStudent(400, 1, 1, 3, 7.5);
         student1.CreateGradeOfStudent(400, 1, 1, 4, 8);
         student1.CreateGradeOfStudent(400, 1, 1, 5, 5.5);
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "04/05/2026", 1, 0);
+        student1.printSpecificStudentPresentOrAbsent();
 //        student1.printStudentBimonthlyAvg(400);
 
         student1.CreateGradeOfStudent(400, 2, 1, 1, 10);
