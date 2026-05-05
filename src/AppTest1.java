@@ -14,8 +14,8 @@ public class AppTest1 {
         student1.CreateGradeOfStudent(400, 1, 1, 3, 7.5);
         student1.CreateGradeOfStudent(400, 1, 1, 4, 8);
         student1.CreateGradeOfStudent(400, 1, 1, 5, 5.5);
-        student1.createSpecificStudentPresentOrAbsent(400, 1, "04/05/2026", 1, 0);
-        student1.printSpecificStudentPresentOrAbsent();
+//        student1.createSpecificStudentPresentOrAbsent(400, 1, "2026-05-04", 1, 0);
+//        student1.printSpecificStudentPresentOrAbsent();
 //        student1.printStudentBimonthlyAvg(400);
 
         student1.CreateGradeOfStudent(400, 2, 1, 1, 10);
@@ -45,6 +45,14 @@ public class AppTest1 {
         student1.printSTudentSpecificGradeForEnrollMentAndSubject(400, 1);
         student1.printStudentBimonthlyAvgForSubject(400, 1);
 //        System.out.println(student1.checkingGradeOfStudent(400, 4, 1, 7));
+
+//        student1.test(400, 1);
+
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "04/05/2026", 1, 0);
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "05/05/2026", 1, 0);
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "06/05/2026", 0, 1);
+        student1.printSpecificStudentPresentOrAbsent();
+//        System.out.println(student1.valitedSpecificPresentOrValited(400, 1, "07/05/2026"));
 
 
 
