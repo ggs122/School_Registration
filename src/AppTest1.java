@@ -51,8 +51,10 @@ public class AppTest1 {
         student1.createSpecificStudentPresentOrAbsent(400, 1, "04/05/2026", 1, 0);
         student1.createSpecificStudentPresentOrAbsent(400, 1, "05/05/2026", 1, 0);
         student1.createSpecificStudentPresentOrAbsent(400, 1, "06/05/2026", 0, 1);
-        student1.printSpecificStudentPresentOrAbsent();
-//        System.out.println(student1.valitedSpecificPresentOrValited(400, 1, "07/05/2026"));
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "07/05/2026", 0, 1);
+        student1.printSpecificStudentPresentOrAbsent(400, 1);
+//        System.out.println(student1.valitedSpecificPresentOrAbsent(400, 1, "08/05/2026"));
+        student1.printSpecificStudentTotalPresentOrAbsent(400, 1);
 
 
 
