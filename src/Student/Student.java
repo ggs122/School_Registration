@@ -275,8 +275,7 @@ public class Student {
                        s.studentEnrollment == studentEnrollment &&
                                StudentUtils.returnBimonthly(bimonthlyPresentOrAbsent) == bimonthlyPresentOrAbsent
                        );
-
-        if (foundStudent == true && foundStudentBimonthlyAgvList == true) {
+        if (foundStudent == true && foundStudentBimonthlyAgvList == true && valitedSpecificPresentOrAbsent(studentEnrollment, bimonthlyPresentOrAbsent, datePresentOrAbsent) == false) {
             IO.println("-----------------------------------------------------------------------");
             IO.println("Aluno encontrado e bimestre da respectiva média encontados com sucesso!");
             IO.println("-----------------------------------------------------------------------");
@@ -298,50 +297,38 @@ public class Student {
         }
     }
 
-    private boolean valitedSpecificPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent, String datePresentOrAbsent, int studentPresent, int studentAbsent) {
+    private boolean valitedSpecificPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent, String datePresentOrAbsent) {
         boolean chechking = true;
+        Locale localeBr = Locale.of("pt", "BR");
+        LocalDate dateFormated = LocalDate.parse(datePresentOrAbsent, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+       chechking = studentPresentOrAbsentList
+                .stream()
+                .anyMatch(s ->
+                    s.studentEnrollment == studentEnrollment &&
+                            s.bimonthlyPresentOrAbsent == bimonthlyPresentOrAbsent &&
+                            s.dateOfPresentOrAbsent.equals(dateFormated)
+                );
 
-        if (!studentsList.isEmpty() && !studentBimonthlyAvgList.isEmpty() && !studentPresentOrAbsentList.isEmpty()) {
-            boolean foundStudent = studentsList
-                    .stream()
-                    .anyMatch(s -> s.studentEnrollment == studentEnrollment);
+       if (chechking == true) {
+           IO.println("-----------------------------------------------------------------------------------------------------------------------------");
+           studentPresentOrAbsentList
+                   .stream()
+                   .filter(s ->
+                           s.studentEnrollment == studentEnrollment &&
+                                   s.bimonthlyPresentOrAbsent == bimonthlyPresentOrAbsent &&
+                                   s.dateOfPresentOrAbsent.equals(dateFormated)
+                   ).forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Bimestre: %dº | Dia: %3$td, %3$-15tA, %3$tB, %3$tY -> Presença já cadastrada anteriormente!", s.studentEnrollment, s.bimonthlyPresentOrAbsent, s.dateOfPresentOrAbsent)));
+           IO.println("-----------------------------------------------------------------------------------------------------------------------------");
 
-            boolean foundStudentBimonthlyAgvList = studentBimonthlyAvgList
-                    .stream()
-                    .anyMatch(s ->
-                            s.studentEnrollment == studentEnrollment &&
-                                    StudentUtils.returnBimonthly(bimonthlyPresentOrAbsent) == bimonthlyPresentOrAbsent
-                    );
-            LocalDate dateFormated = LocalDate.parse(datePresentOrAbsent, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+       } else {
+           if (chechking == false) {
+               IO.println("-----------------------------------------------------------------------------------------------------------------------------");
+               IO.println("Presença cadastrada com sucesso!");
+               IO.println("-----------------------------------------------------------------------------------------------------------------------------");
+           }
+       }
 
-            boolean foundDate = studentPresentOrAbsentList
-                    .stream()
-                    .anyMatch(s -> s.dateOfPresentOrAbsent.equals(dateFormated));
-
-            if (foundStudent == true && foundStudentBimonthlyAgvList == true && foundDate == true) {
-                IO.println("Presença ou falta já informada anteriormente nesta data");
-                chechking = true;
-                return chechking;
-            } else {
-                if (foundStudent == false && foundStudentBimonthlyAgvList == false && foundDate == false) {
-                    try {
-                        LocalDate dateFormatedForCreated = LocalDate.parse(datePresentOrAbsent, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                        Student student = new Student(studentEnrollment, bimonthlyPresentOrAbsent, dateFormatedForCreated, studentPresent, studentAbsent);
-                        studentPresentOrAbsentList.add(student);
-                    } catch (Exception e) {
-                        IO.println("Ops! Erro! Data formato inválido");
-                    }
-                    IO.println("Presença ou falta lançado(a) com sucesso!");
-                    chechking = false;
-                    return chechking;
-                }
-            }
-        } else {
-            if (studentsList.isEmpty() && studentBimonthlyAvgList.isEmpty() && studentPresentOrAbsentList.isEmpty()) {
-                IO.println("Aluno, Média bimestral e presença ainda não foram cadastrados.");
-            }
-        }
-        return chechking;
+       return chechking;
     }
 
 

@@ -1,6 +1,7 @@
 import Student.Student;
 
 import Student.StudentUtils.*;
+import Teacher.Teacher;
 
 public class AppTest1 {
 
@@ -52,6 +53,8 @@ public class AppTest1 {
         student1.createSpecificStudentPresentOrAbsent(400, 1, "05/05/2026", 1, 0);
         student1.createSpecificStudentPresentOrAbsent(400, 1, "06/05/2026", 0, 1);
         student1.createSpecificStudentPresentOrAbsent(400, 1, "07/05/2026", 0, 1);
+        student1.createSpecificStudentPresentOrAbsent(400, 1, "07/05/2026", 0, 1);
+
         student1.printSpecificStudentPresentOrAbsent(400, 1);
 //        System.out.println(student1.valitedSpecificPresentOrAbsent(400, 1, "08/05/2026"));
         student1.printSpecificStudentTotalPresentOrAbsent(400, 1);
@@ -71,6 +74,11 @@ public class AppTest1 {
 
         Student student4 = new Student();
         student4.createStudent("1504", "Igor", "Melo", "de Oliveira");
+
+        Teacher teacher = new Teacher();
+        teacher.createTeacher(1, "Isadora", "dos Santos", "Silva");
+        teacher.createTeacher(2, "Márcia", "Souza", "Soares");
+        teacher.printTeachers();
 
 
 //        System.out.println(student3.CheckingSpecificName("Romualdo", "Ferreira", "da Silva"));
