@@ -1,4 +1,4 @@
-package Teacher;
+package br.com.javainsider.Enrollment;
 
 public final class TeacherUtils {
 

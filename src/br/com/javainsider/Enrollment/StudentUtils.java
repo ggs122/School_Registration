@@ -1,6 +1,6 @@
-package Student;
+package br.com.javainsider.Enrollment;
 
-import Student.Student.*;
+import br.com.javainsider.Enrollment.Student.*;
 
 public final class StudentUtils {
 
@@ -45,6 +45,16 @@ public final class StudentUtils {
             case 3 -> 3;
             case 4 -> 4;
             default -> 0;
+        };
+    }
+
+    public static String returnStudentClass(int chooseStudentClass) {
+        return switch (chooseStudentClass) {
+            case 1 -> "1504";
+            case 2 -> "1505";
+            case 3 -> "1506";
+            case 4 -> "1507";
+            default -> "Número de turma inválido";
         };
     }
 }

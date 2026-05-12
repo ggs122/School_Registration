@@ -1,7 +1,8 @@
-import Student.Student;
+package br.com.javainsider.AppTests;
 
-import Student.StudentUtils.*;
-import Teacher.Teacher;
+import br.com.javainsider.Enrollment.Student;
+
+import br.com.javainsider.Enrollment.Teacher;
 
 public class AppTest1 {
 
@@ -9,7 +10,7 @@ public class AppTest1 {
     static void main(String[] args) {
 
         Student student1 = new Student();
-        student1.createStudent("1504", "Romualdo", "Ferreira", "da Silva");
+        student1.createStudent(1, "Romualdo", "Ferreira", "da Silva");
         student1.CreateGradeOfStudent(400, 1, 1, 1, 3.5);
         student1.CreateGradeOfStudent(400, 1, 1, 2, 6);
         student1.CreateGradeOfStudent(400, 1, 1, 3, 7.5);
@@ -73,12 +74,17 @@ public class AppTest1 {
 //        student3.printStudent();
 
         Student student4 = new Student();
-        student4.createStudent("1504", "Igor", "Melo", "de Oliveira");
+        student4.createStudent(1, "Igor", "Melo", "de Oliveira");
 
         Teacher teacher = new Teacher();
-        teacher.createTeacher(1, "Isadora", "dos Santos", "Silva");
-        teacher.createTeacher(2, "Márcia", "Souza", "Soares");
+        teacher.createTeacher(1, 1,"Isadora", "dos Santos", "Silva");
+        teacher.createTeacher(2, 2,"Márcia", "Souza", "Soares");
+        teacher.createTeacher(2, 2,"Márcia", "Souza", "Soares");
         teacher.printTeachers();
+
+        student1.showStudentAndTeacherClass();
+
+//        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));
 
 
 //        System.out.println(student3.CheckingSpecificName("Romualdo", "Ferreira", "da Silva"));

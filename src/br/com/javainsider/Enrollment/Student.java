@@ -1,4 +1,4 @@
-package Student;
+package br.com.javainsider.Enrollment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -45,9 +45,9 @@ public class Student {
 
     private double studentFinalAnualGrade;
 
-    private String teachersStudentFirstName = "Cadastre";
-    private String teachersStudentMidlleName = "um";
-    private String teachersStudentLastName = "nome";
+//    private String teachersStudentFirstName = "Cadastre";
+//    private String teachersStudentMidlleName = "um";
+//    private String teachersStudentLastName = "nome";
 
     // studentPresent -> Presenças do aluno.
     private int studentPresent;
@@ -66,6 +66,7 @@ public class Student {
     static List<Student> studentBimonthlyAvgList = new ArrayList<>();
     static List<Student> studentPresentOrAbsentList = new ArrayList<>();
     static List<Student> bimonthlyPresentOrAbsentForMethod = new ArrayList<>();
+    static List<Teacher> teachersList = Teacher.getTeachersList();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         this.id = id;
@@ -91,15 +92,15 @@ public class Student {
         this.studentBimonthlyAvg = studentBimonthlyAvg;
     }
 
-    private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName) {
-        this.studentEnrollment = studentEnrollment;
-        this.studentFirstName = studentFirstName;
-        this.studentMidlleName = studentMidlleName;
-        this.studentLastName = studentLastName;
-        this.teachersStudentFirstName = teachersStudentFirstName;
-        this.teachersStudentMidlleName = teachersStudentMidlleName;
-        this.teachersStudentLastName = teachersStudentLastName;
-    }
+//    private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName) {
+//        this.studentEnrollment = studentEnrollment;
+//        this.studentFirstName = studentFirstName;
+//        this.studentMidlleName = studentMidlleName;
+//        this.studentLastName = studentLastName;
+//        this.teachersStudentFirstName = teachersStudentFirstName;
+//        this.teachersStudentMidlleName = teachersStudentMidlleName;
+//        this.teachersStudentLastName = teachersStudentLastName;
+//    }
 
     private Student(long studentEnrollment, int bimonthlyPresentOrAbsent, LocalDate dateOfPresentOrAbsent, int studentPresent, int studentAbsent) {
         this.studentEnrollment = studentEnrollment;
@@ -139,17 +140,17 @@ public class Student {
         return studentLastName;
     }
 
-    protected String getTeachersStudentFirstName() {
-        return teachersStudentFirstName;
-    }
-
-    protected String getTeachersStudentMidlleName() {
-        return teachersStudentMidlleName;
-    }
-
-    protected String getTeachersStudentLasttName() {
-        return teachersStudentLastName;
-    }
+//    protected String getTeachersStudentFirstName() {
+//        return teachersStudentFirstName;
+//    }
+//
+//    protected String getTeachersStudentMidlleName() {
+//        return teachersStudentMidlleName;
+//    }
+//
+//    protected String getTeachersStudentLasttName() {
+//        return teachersStudentLastName;
+//    }
 
     protected double getStudentGrade() {
         return studentGrade;
@@ -179,19 +180,15 @@ public class Student {
         return studentsList;
     }
 
-    public void createStudent(String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
+    public void createStudent(int studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         Locale localeBr = Locale.of("pt", "BR");
         Student student1 = new Student();
-        boolean studentClassBoolean = studentClass.matches("[0-9]{4}");
-        if (studentClassBoolean == true && student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == false) {
-            Student student2 = new Student(staticId++, staticStudentEnrollment++, studentClass, studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase());
+
+        if (student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == false) {
+            Student student2 = new Student(staticId++, staticStudentEnrollment++, StudentUtils.returnStudentClass(studentClass), studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase());
             studentsList.add(student2);
             IO.println("--------------------------------------------------------------------------------------------");
             IO.println(String.format("Aluno %s %s %s, criado com sucesso!", student2.studentFirstName, student2.studentMidlleName, student2.studentLastName));
-            IO.println("--------------------------------------------------------------------------------------------");
-        } else if (studentClassBoolean == false) {
-            IO.println("--------------------------------------------------------------------------------------------");
-            IO.println("Número da turma só aceita 4 dígitos.\nEx: 0000\nNão confere com " + studentClass + " que foi digitado.");
             IO.println("--------------------------------------------------------------------------------------------");
         } else if (student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == true) {
             IO.println("--------------------------------------------------------------------------------------------");
@@ -330,8 +327,6 @@ public class Student {
 
        return chechking;
     }
-
-
 
     public void printSpecificStudentPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent) {
         if (!studentPresentOrAbsentList.isEmpty()) {
@@ -647,21 +642,41 @@ IO.println();
         }
     }
 
+    public void showStudentAndTeacherClass() {
+        IO.println("Professora dos alunos:");
+        Locale localeBr = Locale.of("pt", "BR");
+        for (var s : studentsList) {
+            for (var t : teachersList) {
+                if (s.studentClass.equals(t.getTeacherClass())) {
+                    IO.println();
+//                    studentsList
+//                            .stream()
+//                                    .filter(st -> st.studentClass == s.studentClass)
+//                                            .distinct()
+//                                                    .forEach(st -> IO.println(String.format(localeBr, "Turma: %s", st.studentClass)));
+                    IO.println(String.format(localeBr, "Turma: %s", s.studentClass));
+                    IO.println(String.format(localeBr,"Aluno: %s %s %s", s.studentFirstName, s.studentMidlleName, s.studentLastName));
+                }
+            }
+        }
+
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         Student student = (Student) object;
-        return id == student.id && studentEnrollment == student.studentEnrollment && Double.compare(studentGrade, student.studentGrade) == 0 && Double.compare(studentAvgQuarter, student.studentAvgQuarter) == 0 && Double.compare(studentFinalAnualGrade, student.studentFinalAnualGrade) == 0 && studentPresent == student.studentPresent && studentAbsent == student.studentAbsent && studentTardy == student.studentTardy && Objects.equals(studentClass, student.studentClass) && Objects.equals(studentFirstName, student.studentFirstName) && Objects.equals(studentMidlleName, student.studentMidlleName) && Objects.equals(studentLastName, student.studentLastName) && Objects.equals(teachersStudentFirstName, student.teachersStudentFirstName) && Objects.equals(teachersStudentMidlleName, student.teachersStudentMidlleName) && Objects.equals(teachersStudentLastName, student.teachersStudentLastName);
+        return id == student.id && studentEnrollment == student.studentEnrollment && Double.compare(studentGrade, student.studentGrade) == 0 && Double.compare(studentAvgQuarter, student.studentAvgQuarter) == 0 && bimonthly == student.bimonthly && bimonthlyAvg == student.bimonthlyAvg && bimonthlyPresentOrAbsentForStaticMethod == student.bimonthlyPresentOrAbsentForStaticMethod && Double.compare(studentBimonthlyAvg, student.studentBimonthlyAvg) == 0 && Double.compare(studentFinalAnualGrade, student.studentFinalAnualGrade) == 0 && studentPresent == student.studentPresent && studentAbsent == student.studentAbsent && bimonthlyPresentOrAbsent == student.bimonthlyPresentOrAbsent && studentTardy == student.studentTardy && subject == student.subject && gradeType == student.gradeType && Objects.equals(studentClass, student.studentClass) && Objects.equals(studentFirstName, student.studentFirstName) && Objects.equals(studentMidlleName, student.studentMidlleName) && Objects.equals(studentLastName, student.studentLastName) && subjectBimonthlyAvg == student.subjectBimonthlyAvg && Objects.equals(dateOfPresentOrAbsent, student.dateOfPresentOrAbsent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, studentEnrollment, studentClass, studentFirstName, studentMidlleName, studentLastName, studentGrade, studentAvgQuarter, studentFinalAnualGrade, teachersStudentFirstName, teachersStudentMidlleName, teachersStudentLastName, studentPresent, studentAbsent, studentTardy);
+        return Objects.hash(id, studentEnrollment, subject, gradeType, studentClass, studentFirstName, studentMidlleName, studentLastName, studentGrade, studentAvgQuarter, bimonthly, bimonthlyAvg, bimonthlyPresentOrAbsentForStaticMethod, subjectBimonthlyAvg, studentBimonthlyAvg, studentFinalAnualGrade, studentPresent, studentAbsent, bimonthlyPresentOrAbsent, dateOfPresentOrAbsent, studentTardy);
     }
 
     @Override
     public String toString() {
         Locale localeBR = Locale.of("pt", "BR");
-        return String.format(localeBR, "Id: %d | Matrícula: %d | Turma: %s | Aluno: %-15s %-15s %-15s | Notas: %.2f | Bimestre: %.2f | Nota Final: %.2f | Professora: %s %s %s | Presença: %d | Falta: %d | Atrasos: %d", id, studentEnrollment, studentClass, studentFirstName, studentMidlleName, studentLastName, studentGrade, studentAvgQuarter, studentFinalAnualGrade, teachersStudentFirstName, teachersStudentMidlleName, teachersStudentLastName, studentPresent, studentAbsent, studentTardy);
+        return String.format(localeBR, "Id: %d | Matrícula: %d | Turma: %s | Aluno: %-15s %-15s %-15s | Notas: %.2f | Bimestre: %.2f | Nota Final: %.2f | Presença: %d | Falta: %d | Atrasos: %d", id, studentEnrollment, studentClass, studentFirstName, studentMidlleName, studentLastName, studentGrade, studentAvgQuarter, studentFinalAnualGrade, studentPresent, studentAbsent, studentTardy);
     }
 }
