@@ -82,6 +82,12 @@ public class AppTest1 {
         teacher.createTeacher(2, 2,"Márcia", "Souza", "Soares");
         teacher.printTeachers();
 
+        Student student5 = new Student();
+        student5.createStudent(2, "Helias", "Silva", "Soares");
+
+        Student student6 = new Student();
+        student6.createStudent(2, "Solange", "Couto", "Martins");
+
         student1.showStudentAndTeacherClass();
 
 //        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));

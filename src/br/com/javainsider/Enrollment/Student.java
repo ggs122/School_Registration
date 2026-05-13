@@ -643,23 +643,45 @@ IO.println();
     }
 
     public void showStudentAndTeacherClass() {
-        IO.println("Professora dos alunos:");
-        Locale localeBr = Locale.of("pt", "BR");
-        for (var s : studentsList) {
-            for (var t : teachersList) {
-                if (s.studentClass.equals(t.getTeacherClass())) {
-                    IO.println();
-//                    studentsList
-//                            .stream()
-//                                    .filter(st -> st.studentClass == s.studentClass)
-//                                            .distinct()
-//                                                    .forEach(st -> IO.println(String.format(localeBr, "Turma: %s", st.studentClass)));
-                    IO.println(String.format(localeBr, "Turma: %s", s.studentClass));
-                    IO.println(String.format(localeBr,"Aluno: %s %s %s", s.studentFirstName, s.studentMidlleName, s.studentLastName));
-                }
-            }
-        }
+        IO.println("--------------------------------------------------------------------------------");
+        IO.println("Todas as Turmas:");
+        IO.println();
+        Locale localeBr = Locale.forLanguageTag("pt-BR");
 
+        List<String> studentClassList = studentsList
+                .stream()
+                .map(s -> s.studentClass)
+                .distinct()
+                .toList();
+
+        List<String> teacherClassList = teachersList
+                .stream()
+                .map(s -> s.getTeacherClass())
+                .distinct()
+                .toList();
+
+        studentClassList
+                .forEach(sc -> {
+                    studentsList
+                            .stream()
+                            .filter(s -> s.studentClass.equals(sc))
+                            .map(s -> s.studentClass)
+                            .distinct()
+                            .forEach(s -> IO.println(String.format(localeBr, "Turma: %s",s)));
+
+                    teachersList
+                            .stream()
+                            .filter(t -> t.getTeacherClass().equals(sc))
+                            .forEach(t -> IO.println(String.format(localeBr,"Professora: %s %s %s\nMatéria: %s", t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), t.getSubjectTeacher())));
+                    IO.println();
+                    IO.println("Alunos:");
+                    studentsList
+                            .stream()
+                            .filter(s -> s.studentClass.equals(sc))
+                            .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Aluno: %s %s %s", s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+                    IO.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+                });
+        IO.println("--------------------------------------------------------------------------------");
     }
 
     @Override
