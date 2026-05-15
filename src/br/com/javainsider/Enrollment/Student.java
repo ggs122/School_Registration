@@ -742,6 +742,7 @@ IO.println();
                        );
 
       if (booleanFoundStudent && booleanFoundTeacher) {
+          IO.println("Entrou aqui");
         List<Student> foundStudentList  = studentsList
                   .stream()
                   .filter(s ->
@@ -755,11 +756,13 @@ IO.println();
                         )
                 .toList();
 
+       StringBuilder sb = new StringBuilder(subjectTextOfStudents);
+
        foundStudentList
                .forEach(f -> {
                    foundTeacherList
                            .forEach(t -> {
-                               Student student = new Student(f.studentEnrollment, f.studentFirstName, f.studentMidlleName, f.studentLastName, t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), new StringBuilder(subjectTextOfStudents));
+                               Student student = new Student(f.studentEnrollment, f.studentFirstName, f.studentMidlleName, f.studentLastName, t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), sb);
                                subjectTextsOfStudentList.add(student);
                            });
                });
@@ -769,6 +772,12 @@ IO.println();
       }
     }
 
+    public void printWriteSubjectTextOfStudent() {
+       Locale localeBr = Locale.forLanguageTag("pt-BR");
+        subjectTextsOfStudentList
+                .stream()
+                .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Aluno: %s %s %s | Professora: %s %s %s\nTexto: %s ",s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName, s.teachersStudentFirstName, s.teachersStudentMidlleName, s.teachersStudentLastName, s.subjectTextOfStudents.toString())));
+    }
 
     @Override
     public boolean equals(Object object) {

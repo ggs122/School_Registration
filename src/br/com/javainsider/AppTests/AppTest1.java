@@ -96,7 +96,8 @@ public class AppTest1 {
         Teacher teacher1 = new Teacher();
         teacher1.findTeacher("Isadora", "dos Santos", "Silva");
 
-        student7.writeSubjectTextsOfStudents(400, 50000, "Texto qualquer");
+        student7.writeSubjectTextsOfStudents(400, 70000, "Desenhos ilustrativos de arte barroca, histórias da arte moderna e pinturas de tinta a óleo.");
+        student7.printWriteSubjectTextOfStudent();
 
 //        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));
 
