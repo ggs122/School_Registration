@@ -128,6 +128,37 @@ public class Teacher {
         }
     }
 
+    public void findTeacher(String teacherFirstName, String teacherMidlleName, String teacherLastName) {
+        IO.println("----------------------------------------------------------------------------------------");
+        IO.println("Busca de professores por nome:");
+        IO.println();
+        Locale localeBr = Locale.forLanguageTag("pt-BR");
+       boolean booleanFoundTeacher = teachersList
+                .stream()
+                .anyMatch(t ->
+                                t.getTeacherFirstName().equalsIgnoreCase(teacherFirstName) &&
+                                t.getTeacherMidlleName().equalsIgnoreCase(teacherMidlleName) &&
+                                t.getTeacherLastName().equalsIgnoreCase(teacherLastName)
+                        );
+
+       if (booleanFoundTeacher) {
+           IO.println("Professor(a) encontrado!");
+           IO.println();
+           teachersList
+                   .stream()
+                   .filter(t ->
+                                          t.getTeacherFirstName().equalsIgnoreCase(teacherFirstName) &&
+                                           t.getTeacherMidlleName().equalsIgnoreCase(teacherMidlleName) &&
+                                           t.getTeacherLastName().equalsIgnoreCase(teacherLastName)
+                           )
+                   .forEach(t -> IO.println(t));
+           IO.println("----------------------------------------------------------------------------------------");
+       } else {
+           IO.println(String.format(localeBr, "Professor(a) %s %s %s -> Não foi encontrado(a) no banco de dados", teacherFirstName, teacherMidlleName, teacherLastName));
+           IO.println("----------------------------------------------------------------------------------------");
+       }
+    }
+
     @Override
     public String toString() {
         Locale localeBr = Locale.of("pt", "BR");

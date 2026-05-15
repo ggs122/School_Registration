@@ -45,9 +45,9 @@ public class Student {
 
     private double studentFinalAnualGrade;
 
-//    private String teachersStudentFirstName = "Cadastre";
-//    private String teachersStudentMidlleName = "um";
-//    private String teachersStudentLastName = "nome";
+    private String teachersStudentFirstName = "Cadastre";
+    private String teachersStudentMidlleName = "um";
+    private String teachersStudentLastName = "nome";
 
     // studentPresent -> Presenças do aluno.
     private int studentPresent;
@@ -60,6 +60,8 @@ public class Student {
     // tardy -> atrasos do aluno.
     private int studentTardy;
 
+    private StringBuilder subjectTextOfStudents;
+
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();
     static List<Student> studentOldGradeList = new ArrayList<>();
@@ -67,6 +69,7 @@ public class Student {
     static List<Student> studentPresentOrAbsentList = new ArrayList<>();
     static List<Student> bimonthlyPresentOrAbsentForMethod = new ArrayList<>();
     static List<Teacher> teachersList = Teacher.getTeachersList();
+    static List<Student> subjectTextsOfStudentList = new ArrayList<>();
 
     private Student(long id, long studentEnrollment, String studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         this.id = id;
@@ -92,15 +95,16 @@ public class Student {
         this.studentBimonthlyAvg = studentBimonthlyAvg;
     }
 
-//    private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName) {
-//        this.studentEnrollment = studentEnrollment;
-//        this.studentFirstName = studentFirstName;
-//        this.studentMidlleName = studentMidlleName;
-//        this.studentLastName = studentLastName;
-//        this.teachersStudentFirstName = teachersStudentFirstName;
-//        this.teachersStudentMidlleName = teachersStudentMidlleName;
-//        this.teachersStudentLastName = teachersStudentLastName;
-//    }
+    private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName, StringBuilder subjectTextOfStudents) {
+        this.studentEnrollment = studentEnrollment;
+        this.studentFirstName = studentFirstName;
+        this.studentMidlleName = studentMidlleName;
+        this.studentLastName = studentLastName;
+        this.teachersStudentFirstName = teachersStudentFirstName;
+        this.teachersStudentMidlleName = teachersStudentMidlleName;
+        this.teachersStudentLastName = teachersStudentLastName;
+        this.subjectTextOfStudents = subjectTextOfStudents;
+    }
 
     private Student(long studentEnrollment, int bimonthlyPresentOrAbsent, LocalDate dateOfPresentOrAbsent, int studentPresent, int studentAbsent) {
         this.studentEnrollment = studentEnrollment;
@@ -643,46 +647,128 @@ IO.println();
     }
 
     public void showStudentAndTeacherClass() {
-        IO.println("--------------------------------------------------------------------------------");
-        IO.println("Todas as Turmas:");
-        IO.println();
-        Locale localeBr = Locale.forLanguageTag("pt-BR");
+        if (!studentsList.isEmpty() && !teachersList.isEmpty()) {
+            IO.println("--------------------------------------------------------------------------------");
+            IO.println("Todas as Turmas:");
+            IO.println();
+            Locale localeBr = Locale.forLanguageTag("pt-BR");
 
-        List<String> studentClassList = studentsList
-                .stream()
-                .map(s -> s.studentClass)
-                .distinct()
-                .toList();
+            List<String> studentClassList = studentsList
+                    .stream()
+                    .map(s -> s.studentClass)
+                    .distinct()
+                    .toList();
 
-        List<String> teacherClassList = teachersList
-                .stream()
-                .map(s -> s.getTeacherClass())
-                .distinct()
-                .toList();
+            List<String> teacherClassList = teachersList
+                    .stream()
+                    .map(s -> s.getTeacherClass())
+                    .distinct()
+                    .toList();
 
-        studentClassList
-                .forEach(sc -> {
-                    studentsList
-                            .stream()
-                            .filter(s -> s.studentClass.equals(sc))
-                            .map(s -> s.studentClass)
-                            .distinct()
-                            .forEach(s -> IO.println(String.format(localeBr, "Turma: %s",s)));
+            studentClassList
+                    .forEach(sc -> {
+                        studentsList
+                                .stream()
+                                .filter(s -> s.studentClass.equals(sc))
+                                .map(s -> s.studentClass)
+                                .distinct()
+                                .forEach(s -> IO.println(String.format(localeBr, "Turma: %s",s)));
 
-                    teachersList
-                            .stream()
-                            .filter(t -> t.getTeacherClass().equals(sc))
-                            .forEach(t -> IO.println(String.format(localeBr,"Professora: %s %s %s\nMatéria: %s", t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), t.getSubjectTeacher())));
-                    IO.println();
-                    IO.println("Alunos:");
-                    studentsList
-                            .stream()
-                            .filter(s -> s.studentClass.equals(sc))
-                            .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Aluno: %s %s %s", s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
-                    IO.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-                });
-        IO.println("--------------------------------------------------------------------------------");
+                        teachersList
+                                .stream()
+                                .filter(t -> t.getTeacherClass().equals(sc))
+                                .forEach(t -> IO.println(String.format(localeBr,"Professora: %s %s %s\nMatéria: %s", t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), t.getSubjectTeacher())));
+                        IO.println();
+                        IO.println("Alunos:");
+                        studentsList
+                                .stream()
+                                .filter(s -> s.studentClass.equals(sc))
+                                .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Aluno: %s %s %s", s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+                        IO.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+                    });
+            IO.println("--------------------------------------------------------------------------------");
+        } else {
+            if (studentsList.isEmpty() && teachersList.isEmpty()) {
+                IO.println("--------------------------------------------------------------------------------");
+                IO.println("Ops!! Alunos e professores ainda não foram cadastrados!");
+                IO.println("--------------------------------------------------------------------------------");
+            }
+        }
     }
+
+    public void findStudent(String studentFirstName, String studentMidlleName, String studentLastName) {
+        IO.println("--------------------------------------------------------------------------------");
+        IO.println("Busca por nome do aluno:");
+        Locale localeBr = Locale.forLanguageTag("pt-BR");
+      boolean foundStudent = studentsList
+                .stream()
+                .anyMatch(s ->
+                        s.studentFirstName.equalsIgnoreCase(studentFirstName.trim()) &&
+                        s.studentMidlleName.equalsIgnoreCase(studentMidlleName.trim()) &&
+                        s.studentLastName.equalsIgnoreCase(studentLastName.trim())
+                        );
+      if (foundStudent) {
+          IO.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+          IO.println("Aluno encontrado com sucesso!");
+          IO.println();
+          studentsList
+                  .stream()
+                  .filter(s ->
+                          s.studentFirstName.equalsIgnoreCase(studentFirstName.trim()) &&
+                                  s.studentMidlleName.equalsIgnoreCase(studentMidlleName.trim()) &&
+                                  s.studentLastName.equalsIgnoreCase(studentLastName.trim())
+                  )
+                  .forEach(s -> IO.println(String.format(localeBr, "Turma: %s | Matrícula: %d | Aluno: %s %s %s", s.studentClass, s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+          IO.println("--------------------------------------------------------------------------------");
+      } else {
+          IO.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+          IO.println(String.format(localeBr, "O Aluno: %s %s %s -> Não se encontra no banco de dados.", studentFirstName, studentMidlleName, studentLastName));
+          IO.println("--------------------------------------------------------------------------------");
+      }
+    }
+
+    public void writeSubjectTextsOfStudents(long studentEnrollment, long teacherEnrollment, String subjectTextOfStudents) {
+       Locale localeBr = Locale.forLanguageTag("pt-BR");
+       boolean booleanFoundStudent = studentsList
+                .stream()
+                .anyMatch(s ->
+                        s.studentEnrollment == studentEnrollment
+                        );
+
+      boolean booleanFoundTeacher = teachersList
+               .stream()
+               .anyMatch(t ->
+                       t.getTeacherEnrollment() == teacherEnrollment
+                       );
+
+      if (booleanFoundStudent && booleanFoundTeacher) {
+        List<Student> foundStudentList  = studentsList
+                  .stream()
+                  .filter(s ->
+                          s.studentEnrollment == studentEnrollment
+                          )
+                  .toList();
+       List<Teacher> foundTeacherList = teachersList
+                .stream()
+                .filter(t ->
+                        t.getTeacherEnrollment() == teacherEnrollment
+                        )
+                .toList();
+
+       foundStudentList
+               .forEach(f -> {
+                   foundTeacherList
+                           .forEach(t -> {
+                               Student student = new Student(f.studentEnrollment, f.studentFirstName, f.studentMidlleName, f.studentLastName, t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), new StringBuilder(subjectTextOfStudents));
+                               subjectTextsOfStudentList.add(student);
+                           });
+               });
+
+      } else {
+          IO.println(String.format(localeBr, "Matrícula do aluno(a) %d e do professor(a) %d -> Não existem no banco de dados", studentEnrollment, teacherEnrollment));
+      }
+    }
+
 
     @Override
     public boolean equals(Object object) {

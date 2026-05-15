@@ -90,6 +90,14 @@ public class AppTest1 {
 
         student1.showStudentAndTeacherClass();
 
+        Student student7 = new Student();
+        student7.findStudent("Romualdo", "Ferreira", "da Silva");
+
+        Teacher teacher1 = new Teacher();
+        teacher1.findTeacher("Isadora", "dos Santos", "Silva");
+
+        student7.writeSubjectTextsOfStudents(400, 50000, "Texto qualquer");
+
 //        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));
 
 
