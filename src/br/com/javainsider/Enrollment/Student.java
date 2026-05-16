@@ -2,10 +2,7 @@ package br.com.javainsider.Enrollment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class Student {
 
@@ -361,6 +358,61 @@ public class Student {
             IO.println();
             IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
         }
+    }
+
+    public void printSpecificStudentPresentOrAbsentWithoutParam() {
+        if (!studentPresentOrAbsentList.isEmpty() && !studentsList.isEmpty()) {
+            IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
+            Locale localeBr = Locale.of("pt", "BR");
+            IO.println("Presença de Todos os Alunos:");
+            IO.println();
+            List<Student> studentsListWithDistinct = studentsList
+                    .stream()
+                            .distinct()
+                                    .toList();
+
+          List<Integer> bimonthlyStudentPresentOrAbsentList = studentPresentOrAbsentList
+                    .stream()
+                            .mapToInt(s -> s.bimonthlyPresentOrAbsent)
+                                    .distinct()
+                                            .boxed()
+                                                    .toList();
+
+            studentsListWithDistinct
+                    .forEach(sw -> {
+                        studentsList
+                                .stream()
+                                .filter(s -> s.studentEnrollment == sw.studentEnrollment)
+                                .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %s\n\nAluno: %s %s %s", s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName)));
+                        IO.println();
+
+                        bimonthlyStudentPresentOrAbsentList
+                                .forEach(b -> {
+                                    studentPresentOrAbsentList
+                                            .stream()
+                                            .filter(s ->
+                                                    s.studentEnrollment == sw.studentEnrollment && b == s.bimonthlyPresentOrAbsent
+                                            )
+                                            .map(s -> s.bimonthlyPresentOrAbsent)
+                                            .distinct()
+                                            .forEach(s -> IO.println(String.format(localeBr, "Bimestre: %dº", s)));
+                                });
+                        IO.println();
+                        bimonthlyStudentPresentOrAbsentList
+                                .forEach(b -> {
+                                            studentPresentOrAbsentList
+                                                    .stream()
+                                                    .filter(s ->
+                                                            s.studentEnrollment == sw.studentEnrollment && b == s.bimonthlyPresentOrAbsent
+                                                    )
+                                                    .forEach(s -> IO.println(String.format(localeBr, "Dia: %1$td | Dia da Semana: %1$-15tA | Mês: %1$tB | Ano: %1$tY | Presença: %2$d | Falta: %3$d\n", s.dateOfPresentOrAbsent, s.studentPresent, s.studentAbsent)));
+
+                                        }
+                                );
+                        IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
+
+                    });
+            }
 
     }
 

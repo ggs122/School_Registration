@@ -60,6 +60,8 @@ public class AppTest1 {
 //        System.out.println(student1.valitedSpecificPresentOrAbsent(400, 1, "08/05/2026"));
         student1.printSpecificStudentTotalPresentOrAbsent(400, 1);
 
+        student1.printSpecificStudentPresentOrAbsentWithoutParam();
+
 
 
 //        System.out.println(student1.returnBimonthlyAvgOfStudent(400));
@@ -98,6 +100,7 @@ public class AppTest1 {
 
         student7.writeSubjectTextsOfStudents(400, 70000, "Desenhos ilustrativos de arte barroca, histórias da arte moderna e pinturas de tinta a óleo.");
         student7.printWriteSubjectTextOfStudent();
+
 
 //        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));
 
