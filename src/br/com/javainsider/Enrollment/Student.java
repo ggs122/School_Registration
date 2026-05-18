@@ -22,6 +22,11 @@ public class Student {
     private long studentEnrollment = staticStudentEnrollment;
     private static long staticStudentEnrollment = 400;
 
+    private long studentOrderNumberSubjectTextOfNumber = studentOrderNumberSubjectTextOfNumberStatic;
+    private static long studentOrderNumberSubjectTextOfNumberStatic = 1;
+
+    private LocalDate studentOrderNumberSubjectTextOfNumberLocalDate;
+
     private Subject subject;
     private GradeType gradeType;
 
@@ -45,6 +50,7 @@ public class Student {
     private String teachersStudentFirstName = "Cadastre";
     private String teachersStudentMidlleName = "um";
     private String teachersStudentLastName = "nome";
+    private Teacher.SubjectTeacher subjectTeacher;
 
     // studentPresent -> Presenças do aluno.
     private int studentPresent;
@@ -92,7 +98,7 @@ public class Student {
         this.studentBimonthlyAvg = studentBimonthlyAvg;
     }
 
-    private Student(long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName, StringBuilder subjectTextOfStudents) {
+    private Student( long studentOrderNumberSubjectTextOfNumber, LocalDate studentOrderNumberSubjectTextOfNumberLocalDate, long studentEnrollment, String studentFirstName, String studentMidlleName, String studentLastName, String teachersStudentFirstName, String teachersStudentMidlleName, String teachersStudentLastName, Teacher.SubjectTeacher teacherSubject, StringBuilder subjectTextOfStudents) {
         this.studentEnrollment = studentEnrollment;
         this.studentFirstName = studentFirstName;
         this.studentMidlleName = studentMidlleName;
@@ -100,7 +106,11 @@ public class Student {
         this.teachersStudentFirstName = teachersStudentFirstName;
         this.teachersStudentMidlleName = teachersStudentMidlleName;
         this.teachersStudentLastName = teachersStudentLastName;
+        this.subjectTeacher = teacherSubject;
         this.subjectTextOfStudents = subjectTextOfStudents;
+        this.studentOrderNumberSubjectTextOfNumber = studentOrderNumberSubjectTextOfNumber;
+        this.studentOrderNumberSubjectTextOfNumberLocalDate = studentOrderNumberSubjectTextOfNumberLocalDate;
+
     }
 
     private Student(long studentEnrollment, int bimonthlyPresentOrAbsent, LocalDate dateOfPresentOrAbsent, int studentPresent, int studentAbsent) {
@@ -332,6 +342,8 @@ public class Student {
     public void printSpecificStudentPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent) {
         if (!studentPresentOrAbsentList.isEmpty()) {
             IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
+            IO.println("Busca de presenças por aluno:");
+            IO.println();
             Locale localeBr = Locale.of("pt", "BR");
             studentsList
                     .stream()
@@ -343,14 +355,29 @@ public class Student {
                     .filter(s -> s.studentEnrollment == studentEnrollment)
                     .forEach(s -> IO.println(String.format(localeBr, "Aluno(a): %s %s %s", s.studentFirstName, s.studentMidlleName, s.studentLastName)));
             IO.println();
+         List<Integer>  bimonthlyPresentOrAbsentIntegerList = studentPresentOrAbsentList
+                    .stream()
+                    .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthlyPresentOrAbsent == bimonthlyPresentOrAbsent)
+                    .mapToInt(s -> s.bimonthlyPresentOrAbsent)
+                    .distinct()
+                    .boxed()
+                    .toList();
+            bimonthlyPresentOrAbsentIntegerList
+                    .stream()
+                            .filter(b -> b == bimonthlyPresentOrAbsent)
+                                    .distinct()
+                                            .forEach(b -> IO.println(String.format(localeBr, "Bimestre: %dº", b)));
+
+            IO.println();
+
             studentPresentOrAbsentList
                     .stream()
                     .filter(s -> s.studentEnrollment == studentEnrollment && s.bimonthlyPresentOrAbsent == bimonthlyPresentOrAbsent)
                     .forEach(s -> IO.println(
-                            String.format(
-                            localeBr,
+                                    String.format(
+                                            localeBr,
 
-                            "Bimestre: %-8d\nDia: %2$td, %2$-15tA, %2$tB, %2$tY | Presença: %3$d | Falta: %4$d\n", s.bimonthlyPresentOrAbsent, s.dateOfPresentOrAbsent, s.studentPresent, s.studentAbsent
+                                            "Dia: %1$td | Dia da semana: %1$15tA | Mês: %1$tB | Ano: %1$tY | Presença: %2$d | Falta: %3$d\n", s.dateOfPresentOrAbsent, s.studentPresent, s.studentAbsent
                                     )
                             )
                     );
@@ -779,8 +806,9 @@ IO.println();
       }
     }
 
-    public void writeSubjectTextsOfStudents(long studentEnrollment, long teacherEnrollment, String subjectTextOfStudents) {
+    public void writeSubjectTextsOfStudents(long studentEnrollment, long teacherEnrollment, String studentOrderNumberSubjectTextOfNumberLocalDate, String subjectTextOfStudents) {
        Locale localeBr = Locale.forLanguageTag("pt-BR");
+       LocalDate studentOrderNumberSubjectTextOfNumberNewLocalDate = LocalDate.parse(studentOrderNumberSubjectTextOfNumberLocalDate, DateTimeFormatter.ofPattern("dd/MM/yyyy", localeBr));
        boolean booleanFoundStudent = studentsList
                 .stream()
                 .anyMatch(s ->
@@ -794,7 +822,8 @@ IO.println();
                        );
 
       if (booleanFoundStudent && booleanFoundTeacher) {
-          IO.println("Entrou aqui");
+          IO.println("Descrição de estudo por data:");
+          IO.println();
         List<Student> foundStudentList  = studentsList
                   .stream()
                   .filter(s ->
@@ -814,7 +843,7 @@ IO.println();
                .forEach(f -> {
                    foundTeacherList
                            .forEach(t -> {
-                               Student student = new Student(f.studentEnrollment, f.studentFirstName, f.studentMidlleName, f.studentLastName, t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), sb);
+                               Student student = new Student(studentOrderNumberSubjectTextOfNumberStatic++, studentOrderNumberSubjectTextOfNumberNewLocalDate,  f.studentEnrollment, f.studentFirstName, f.studentMidlleName, f.studentLastName, t.getTeacherFirstName(), t.getTeacherMidlleName(), t.getTeacherLastName(), t.getSubjectTeacher(), sb);
                                subjectTextsOfStudentList.add(student);
                            });
                });
@@ -828,7 +857,7 @@ IO.println();
        Locale localeBr = Locale.forLanguageTag("pt-BR");
         subjectTextsOfStudentList
                 .stream()
-                .forEach(s -> IO.println(String.format(localeBr, "Matrícula: %d | Aluno: %s %s %s | Professora: %s %s %s\nTexto: %s ",s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName, s.teachersStudentFirstName, s.teachersStudentMidlleName, s.teachersStudentLastName, s.subjectTextOfStudents.toString())));
+                .forEach(s -> IO.println(String.format(localeBr, "Nº: %d\n\nDia: %td | Dia da semana: %-15tA | Mês: %tB | Ano: %tY\n\nMatrícula: %d | Aluno: %s %s %s\n\nProfessora: %s %s %s\n\nMatéria: %s\n\nTexto: %s ",s.studentOrderNumberSubjectTextOfNumber, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName, s.teachersStudentFirstName, s.teachersStudentMidlleName, s.teachersStudentLastName, s.subjectTeacher, s.subjectTextOfStudents.toString())));
     }
 
     @Override
