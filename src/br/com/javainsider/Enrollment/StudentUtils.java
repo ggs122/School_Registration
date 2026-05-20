@@ -12,7 +12,7 @@ public final class StudentUtils {
 ////        System.out.println(StudentUtils.returnGradeType(-1));
 //    }
 
-    protected StudentUtils() {
+    private StudentUtils() {
     }
 
     public static Subject returnSubject(int chooseNumberOfSubject) {

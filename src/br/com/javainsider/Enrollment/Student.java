@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Student {
+public class Student implements AllInterfacesOfStudent {
 
     protected enum Subject {
         MATEMÁTICA, HISTÓRIA, CIÊNCIAS, GEOGRAFIA, OPÇÃO_INVÁLIDA
@@ -191,6 +191,7 @@ public class Student {
         return studentsList;
     }
 
+    @Override
     public void createStudent(int studentClass, String studentFirstName, String studentMidlleName, String studentLastName) {
         Locale localeBr = Locale.of("pt", "BR");
         Student student1 = new Student();
@@ -207,6 +208,7 @@ public class Student {
             IO.println("--------------------------------------------------------------------------------------------");
         }
     }
+
 
     private boolean CheckingSpecificName(String studentFirstName, String studentMidlleName, String studentLastName) {
       boolean booleanEqualsStudentName = studentsList
@@ -229,6 +231,7 @@ public class Student {
         }
     }
 
+    @Override
     public void CreateGradeOfStudent(long studentEnrollment, int bimonthly, int subject, int gradeType ,double studentGrade) {
 
       boolean studentEnrollmentFoundBoolean = studentsList
@@ -271,6 +274,7 @@ public class Student {
       }
     }
 
+    @Override
     public void createSpecificStudentPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent, String datePresentOrAbsent, int studentPresent, int studentAbsent) {
         boolean foundStudent = studentsList
                 .stream()
@@ -339,6 +343,7 @@ public class Student {
        return chechking;
     }
 
+    @Override
     public void printSpecificStudentPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent) {
         if (!studentPresentOrAbsentList.isEmpty()) {
             IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
@@ -387,6 +392,7 @@ public class Student {
         }
     }
 
+    @Override
     public void printSpecificStudentPresentOrAbsentWithoutParam() {
         if (!studentPresentOrAbsentList.isEmpty() && !studentsList.isEmpty()) {
             IO.println("--------------------------------------------------------------------------------------------------------------------------------------");
@@ -443,6 +449,7 @@ public class Student {
 
     }
 
+    @Override
     public void printSpecificStudentTotalPresentOrAbsent(long studentEnrollment, int bimonthlyPresentOrAbsent) {
         if (!studentPresentOrAbsentList.isEmpty() && !studentsList.isEmpty()) {
             IO.println("------------------------------------");
@@ -485,6 +492,7 @@ public class Student {
         }
     }
 
+    @Override
     public void printGradeList() {
         if (!studentOldGradeList.isEmpty()) {
 
@@ -528,6 +536,7 @@ public class Student {
         return checkingGradeType;
     }
 
+    @Override
     public void printStudentSpecificGradeListForStudentEnrollmentAndBiomonthly(long studentEnrollment, int bimonthly) {
         IO.println("----------------------------------------------------------------------");
         Locale localeBr = Locale.of("pt", "BR");
@@ -588,6 +597,7 @@ IO.println();
         }
     }
 
+    @Override
     public void printSTudentSpecificGradeForEnrollMentAndSubject(long studentEnrollment, int subject) {
         Locale localeBr = Locale.of("pt", "BR");
         IO.println("-------------------------------------------------------");
@@ -654,6 +664,7 @@ IO.println();
 
        }
 
+       @Override
     public void printStudentBimonthlyAvgForSubject(long studentEnrollment, int subject) {
         if (!studentBimonthlyAvgList.isEmpty() && !studentsList.isEmpty()) {
             IO.println("--------------------------------------------");
@@ -725,6 +736,7 @@ IO.println();
         }
     }
 
+    @Override
     public void showStudentAndTeacherClass() {
         if (!studentsList.isEmpty() && !teachersList.isEmpty()) {
             IO.println("--------------------------------------------------------------------------------");
@@ -775,6 +787,7 @@ IO.println();
         }
     }
 
+    @Override
     public void findStudent(String studentFirstName, String studentMidlleName, String studentLastName) {
         IO.println("--------------------------------------------------------------------------------");
         IO.println("Busca por nome do aluno:");
@@ -806,6 +819,7 @@ IO.println();
       }
     }
 
+    @Override
     public void writeSubjectTextsOfStudents(long studentEnrollment, long teacherEnrollment, String studentOrderNumberSubjectTextOfNumberLocalDate, String subjectTextOfStudents) {
        Locale localeBr = Locale.forLanguageTag("pt-BR");
        LocalDate studentOrderNumberSubjectTextOfNumberNewLocalDate = LocalDate.parse(studentOrderNumberSubjectTextOfNumberLocalDate, DateTimeFormatter.ofPattern("dd/MM/yyyy", localeBr));
@@ -822,7 +836,6 @@ IO.println();
                        );
 
       if (booleanFoundStudent && booleanFoundTeacher) {
-          IO.println("Descrição de estudo por data:");
           IO.println();
         List<Student> foundStudentList  = studentsList
                   .stream()
@@ -837,7 +850,7 @@ IO.println();
                         )
                 .toList();
 
-       StringBuilder sb = new StringBuilder(subjectTextOfStudents);
+       StringBuilder sb = new StringBuilder(formatsubjectTextOfStudents(subjectTextOfStudents, 34));
 
        foundStudentList
                .forEach(f -> {
@@ -853,11 +866,36 @@ IO.println();
       }
     }
 
+    @Override
     public void printWriteSubjectTextOfStudent() {
+        IO.println("----------------------------------------------------------------------------------------");
+        IO.println("Tarefas diárias do aluno:");
+        IO.println();
        Locale localeBr = Locale.forLanguageTag("pt-BR");
-        subjectTextsOfStudentList
-                .stream()
-                .forEach(s -> IO.println(String.format(localeBr, "Nº: %d\n\nDia: %td | Dia da semana: %-15tA | Mês: %tB | Ano: %tY\n\nMatrícula: %d | Aluno: %s %s %s\n\nProfessora: %s %s %s\n\nMatéria: %s\n\nTexto: %s ",s.studentOrderNumberSubjectTextOfNumber, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName, s.teachersStudentFirstName, s.teachersStudentMidlleName, s.teachersStudentLastName, s.subjectTeacher, s.subjectTextOfStudents.toString())));
+       if (!subjectTextsOfStudentList.isEmpty()) {
+           subjectTextsOfStudentList
+                   .stream()
+                   .forEach(s -> IO.println(String.format(localeBr, "Nº: %d\n\nDia: %td | Dia da semana: %-15tA | Mês: %tB | Ano: %tY\n\nMatrícula: %d | Aluno: %s %s %s\n\nProfessora: %s %s %s\n\nMatéria: %s\n\nConteúdo -> %s ",s.studentOrderNumberSubjectTextOfNumber, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentOrderNumberSubjectTextOfNumberLocalDate, s.studentEnrollment, s.studentFirstName, s.studentMidlleName, s.studentLastName, s.teachersStudentFirstName, s.teachersStudentMidlleName, s.teachersStudentLastName, s.subjectTeacher, s.subjectTextOfStudents.toString())));
+           IO.println("----------------------------------------------------------------------------------------");
+       }
+    }
+
+    private String formatsubjectTextOfStudents(String text, int numberOfCharacter) {
+
+        if (text == null || text.trim().isEmpty()) {
+            return "Não há um texto para processar a quebra de linha.";
+        }
+
+        StringBuilder textFormated = new StringBuilder();
+        int lenghOfTextInInt = text.length();
+
+        for (int i = 0; i < lenghOfTextInInt; i += numberOfCharacter) {
+
+            int endOfBlock = Math.min(i + numberOfCharacter, lenghOfTextInInt);
+            textFormated.append(text, i, endOfBlock).append("\n");
+        }
+
+        return textFormated.toString();
     }
 
     @Override

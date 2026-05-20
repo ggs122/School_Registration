@@ -97,9 +97,10 @@ public class AppTest1 {
 
         Teacher teacher1 = new Teacher();
         teacher1.findTeacher("Isadora", "dos Santos", "Silva");
-        student7.writeSubjectTextsOfStudents(400, 70000, "18/05/2026", "Aula sobre frações:\n" +
-                "Soma, divisão, multiplicação, subtração");
+        student7.writeSubjectTextsOfStudents(400, 70000, "18/05/2026", "Aula sobre frações: Soma, divisão, multiplicação, subtração");
         student7.printWriteSubjectTextOfStudent();
+
+//        System.out.println(student7.formatsubjectTextOfStudents("A casa de papel caiu em cima de mim e blabla", 16));
 
 
 //        System.out.println(teacher.chechingTeacher(1, 1,"Isadora", "dos Santos", "Silva"));
