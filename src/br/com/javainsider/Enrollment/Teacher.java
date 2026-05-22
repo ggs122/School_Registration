@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Teacher {
+public class Teacher implements AllInterfacesOfTeacher{
 
     protected enum SubjectTeacher {
         MATEMÁTICA, HISTÓRIA, CIÊNCIAS, GEOGRAFIA, OPÇÃO_INVÁLIDA
@@ -66,6 +66,7 @@ public class Teacher {
         return teachersList;
     }
 
+    @Override
     public void createTeacher(int teacherClass, int chooseSubjectTeacher, String teacherFirstName, String teacherMidlleName, String teacherLastName) {
         Teacher teacher = new Teacher(staticId++, teacherEnrollmentStatic++, TeacherUtils.returTeacherClass(teacherClass), returnSubjectTeacher(chooseSubjectTeacher), teacherFirstName.trim(), teacherMidlleName.trim(), teacherLastName.trim());
         if (checkingTeacher(teacherClass, chooseSubjectTeacher, teacherFirstName, teacherMidlleName, teacherLastName) == false) {
@@ -111,6 +112,7 @@ public class Teacher {
        return sameTeacherName;
     }
 
+    @Override
     public void printTeachers() {
         if (!teachersList.isEmpty()) {
             IO.println("----------------------------------------------------------------------------------------");
@@ -128,6 +130,7 @@ public class Teacher {
         }
     }
 
+    @Override
     public void findTeacher(String teacherFirstName, String teacherMidlleName, String teacherLastName) {
         IO.println("----------------------------------------------------------------------------------------");
         IO.println("Busca de professores por nome:");

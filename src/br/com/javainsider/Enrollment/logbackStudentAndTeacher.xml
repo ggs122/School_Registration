@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <timestamp key="dateTimeFormat" datePattern="HH-mm"/>
+
+    <appender name="console1"  class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS}
+            </Pattern>
+        </encoder>
+    </appender>
+num1134
+</configuration>

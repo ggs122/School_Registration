@@ -1,5 +1,8 @@
 package br.com.javainsider.Enrollment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -64,6 +67,8 @@ public class Student implements AllInterfacesOfStudent {
     private int studentTardy;
 
     private StringBuilder subjectTextOfStudents;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("");
 
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();
