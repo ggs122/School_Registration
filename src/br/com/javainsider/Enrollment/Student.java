@@ -68,7 +68,7 @@ public class Student implements AllInterfacesOfStudent {
 
     private StringBuilder subjectTextOfStudents;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("Student.class");
+    private static final Logger LOGGER = LoggerFactory.getLogger("Enrollment.Student");
 
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();

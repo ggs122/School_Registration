@@ -97,7 +97,7 @@ public class AppTest1 {
 
         Teacher teacher1 = new Teacher();
         teacher1.findTeacher("Isadora", "dos Santos", "Silva");
-        teacher1.teacherLogger();
+//        teacher1.teacherLogger();
         student7.writeSubjectTextsOfStudents(400, 70000, "18/05/2026", "Aula sobre frações: Soma, divisão, multiplicação, subtração");
         student7.printWriteSubjectTextOfStudent();
 

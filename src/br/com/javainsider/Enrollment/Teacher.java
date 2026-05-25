@@ -27,7 +27,7 @@ public class Teacher implements AllInterfacesOfTeacher{
     private String teacherMidlleName;
     private String teacherLastName;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Teacher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("Enrollment.Teacher");
 
     static List<Teacher> teachersList = new ArrayList<>();
 
@@ -76,10 +76,12 @@ public class Teacher implements AllInterfacesOfTeacher{
         Teacher teacher = new Teacher(staticId++, teacherEnrollmentStatic++, TeacherUtils.returTeacherClass(teacherClass), returnSubjectTeacher(chooseSubjectTeacher), teacherFirstName.trim(), teacherMidlleName.trim(), teacherLastName.trim());
         if (checkingTeacher(teacherClass, chooseSubjectTeacher, teacherFirstName, teacherMidlleName, teacherLastName) == false) {
             teachersList.add(teacher);
+            teacher.teacherLogger();
         }
     }
 
-    public void teacherLogger() {
+    private void teacherLogger() {
+
         LOGGER.info("Criado o objeto da professora e atribuído ao espaço da memória.");
     }
 
