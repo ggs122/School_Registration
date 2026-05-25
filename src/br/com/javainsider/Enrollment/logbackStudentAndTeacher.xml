@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<configuration>
+<configuration debug="true">
     <timestamp key="dateTimeFormat" datePattern="HH-mm"/>
 
     <appender name="console1"  class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %d{HH:mm:ss.SSS}
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
             </Pattern>
         </encoder>
     </appender>
-num1134
+
+    <appender name="file1"  class="ch.qos.logback.core.FileAppender">
+        <file>logs/file1.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="Enrollment.Student" level="INFO" additivity="false">
+        <appender-ref ref="console1" />
+    </logger>
+
+    <logger name="Enrollment.Teacher" level="INFO" additivity="false">
+        <appender-ref ref="file1" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="console1" />
+    </root>
+
 </configuration>

@@ -1,5 +1,8 @@
 package br.com.javainsider.Enrollment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +26,8 @@ public class Teacher implements AllInterfacesOfTeacher{
     private String teacherFirstName;
     private String teacherMidlleName;
     private String teacherLastName;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Teacher.class);
 
     static List<Teacher> teachersList = new ArrayList<>();
 
@@ -72,7 +77,10 @@ public class Teacher implements AllInterfacesOfTeacher{
         if (checkingTeacher(teacherClass, chooseSubjectTeacher, teacherFirstName, teacherMidlleName, teacherLastName) == false) {
             teachersList.add(teacher);
         }
+    }
 
+    public void teacherLogger() {
+        LOGGER.info("Criado o objeto da professora e atribuído ao espaço da memória.");
     }
 
     private SubjectTeacher returnSubjectTeacher(int chooseSubjectTeacher) {

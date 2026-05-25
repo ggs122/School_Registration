@@ -68,7 +68,7 @@ public class Student implements AllInterfacesOfStudent {
 
     private StringBuilder subjectTextOfStudents;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("");
+    private static final Logger LOGGER = LoggerFactory.getLogger("Student.class");
 
     static List<Student> studentsList = new ArrayList<>();
     static List<Student> studentGradeList = new ArrayList<>();
@@ -206,12 +206,19 @@ public class Student implements AllInterfacesOfStudent {
             studentsList.add(student2);
             IO.println("--------------------------------------------------------------------------------------------");
             IO.println(String.format("Aluno %s %s %s, criado com sucesso!", student2.studentFirstName, student2.studentMidlleName, student2.studentLastName));
+            student2.loggerInfo();
             IO.println("--------------------------------------------------------------------------------------------");
         } else if (student1.CheckingSpecificName(studentFirstName, studentMidlleName, studentLastName) == true) {
             IO.println("--------------------------------------------------------------------------------------------");
             IO.println(String.format(localeBr, "O aluno: %s %s %s, já foi cadastrado anteriormente no sistema", studentFirstName.trim().toUpperCase(), studentMidlleName.trim().toUpperCase(), studentLastName.trim().toUpperCase()));
             IO.println("--------------------------------------------------------------------------------------------");
         }
+    }
+
+    private void loggerInfo() {
+        IO.println("---------------------------------------------------------------");
+        LOGGER.info("Foi gerado o objeto do aluno e atribuído ao espaço da memória.");
+        IO.println("---------------------------------------------------------------");
     }
 
 
