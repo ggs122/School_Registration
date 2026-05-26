@@ -3,6 +3,8 @@ package br.com.javainsider.Enrollment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -219,6 +221,51 @@ public class Student implements AllInterfacesOfStudent {
         IO.println("---------------------------------------------------------------");
         LOGGER.info("Foi gerado o objeto do aluno e atribuído ao espaço da memória.");
         IO.println("---------------------------------------------------------------");
+    }
+
+    public void studentLog() {
+
+        File file = new File("StudentsList");
+
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        
+        try(BufferedWriter bfw = new BufferedWriter(new FileWriter("StudentsList/studentsList.txt"))) {
+            Locale localeBr = Locale.forLanguageTag("pt-BR");
+            bfw.write("Lista de Estudantes da Escola:");
+            bfw.newLine();
+            bfw.newLine();
+            studentsList
+                    .forEach(s -> {
+                        try {
+                            bfw.write(s.toString().concat("\n"));
+                            bfw.newLine();
+                            studentOldGradeList
+                                    .stream()
+                                    .filter(st -> st.studentEnrollment == s.studentEnrollment)
+                                    .forEach(st -> {
+                                        try {
+                                            bfw.write(String.format(localeBr, "Matrícula: %d | Nota: %-8.2f Bimestre: %dº | Atividade: %s", st.studentEnrollment, st.studentGrade, st.bimonthly, st.subject));
+                                            bfw.newLine();
+                                            bfw.newLine();
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    });
+                        } catch (IOException e) {
+
+                        }
+                    });
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        studentsList
+                .forEach(s -> {
+
+                });
     }
 
 
@@ -925,6 +972,6 @@ IO.println();
     @Override
     public String toString() {
         Locale localeBR = Locale.of("pt", "BR");
-        return String.format(localeBR, "Id: %d | Matrícula: %d | Turma: %s | Aluno: %-15s %-15s %-15s | Notas: %.2f | Bimestre: %.2f | Nota Final: %.2f | Presença: %d | Falta: %d | Atrasos: %d", id, studentEnrollment, studentClass, studentFirstName, studentMidlleName, studentLastName, studentGrade, studentAvgQuarter, studentFinalAnualGrade, studentPresent, studentAbsent, studentTardy);
+        return String.format(localeBR, "Id: %d | Matrícula: %d | Turma: %s | Aluno: %-15s %-15s %-15s", id, studentEnrollment, studentClass, studentFirstName, studentMidlleName, studentLastName);
     }
 }

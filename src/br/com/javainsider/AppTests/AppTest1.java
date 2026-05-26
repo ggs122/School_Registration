@@ -101,6 +101,8 @@ public class AppTest1 {
         student7.writeSubjectTextsOfStudents(400, 70000, "18/05/2026", "Aula sobre frações: Soma, divisão, multiplicação, subtração");
         student7.printWriteSubjectTextOfStudent();
 
+        student7.studentLog();
+
 //        student7.loggerInfo();
 
 //        System.out.println(student7.formatsubjectTextOfStudents("A casa de papel caiu em cima de mim e blabla", 16));
