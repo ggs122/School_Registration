@@ -236,6 +236,7 @@ public class Student implements AllInterfacesOfStudent {
             bfw.write("Lista de Estudantes da Escola:");
             bfw.newLine();
             bfw.newLine();
+
             studentsList
                     .forEach(s -> {
                         try {
@@ -246,7 +247,7 @@ public class Student implements AllInterfacesOfStudent {
                                     .filter(st -> st.studentEnrollment == s.studentEnrollment)
                                     .forEach(st -> {
                                         try {
-                                            bfw.write(String.format(localeBr, "Matrícula: %d | Nota: %-8.2f Bimestre: %dº | Atividade: %s", st.studentEnrollment, st.studentGrade, st.bimonthly, st.subject));
+                                            bfw.write(String.format(localeBr, "Matrícula: %d | Nota: %-8.2f Bimestre: %dº | Matéria: %s | Atividade: %s", st.studentEnrollment, st.studentGrade, st.bimonthly, st.subject, st.gradeType));
                                             bfw.newLine();
                                             bfw.newLine();
                                         } catch (IOException e) {
