@@ -230,43 +230,86 @@ public class Student implements AllInterfacesOfStudent {
         if (!file.exists()) {
             file.mkdir();
         }
-        
+
         try(BufferedWriter bfw = new BufferedWriter(new FileWriter("StudentsList/studentsList.txt"))) {
             Locale localeBr = Locale.forLanguageTag("pt-BR");
             bfw.write("Lista de Estudantes da Escola:");
             bfw.newLine();
             bfw.newLine();
 
-            studentsList
-                    .forEach(s -> {
-                        try {
-                            bfw.write(s.toString().concat("\n"));
-                            bfw.newLine();
-                            studentOldGradeList
-                                    .stream()
-                                    .filter(st -> st.studentEnrollment == s.studentEnrollment)
-                                    .forEach(st -> {
-                                        try {
-                                            bfw.write(String.format(localeBr, "Matrícula: %d | Nota: %-8.2f Bimestre: %dº | Matéria: %s | Atividade: %s", st.studentEnrollment, st.studentGrade, st.bimonthly, st.subject, st.gradeType));
-                                            bfw.newLine();
-                                            bfw.newLine();
-                                        } catch (IOException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    });
-                        } catch (IOException e) {
+           for(var s : studentsList) {
+               bfw.write(s.toString().concat("\n"));
 
-                        }
-                    });
+               Map<Integer, List<Double>> bimonthlyWithGrades = new HashMap<>();
+
+               List<Double> studentOldGradeListGrades = studentOldGradeList
+                       .stream()
+                       .filter(st -> st.studentEnrollment == s.studentEnrollment)
+                       .mapToDouble(st -> st.studentGrade)
+                       .boxed()
+                       .toList();
+
+               studentOldGradeList
+                       .stream()
+                       .filter(sto -> sto.studentEnrollment == s.studentEnrollment)
+                       .forEach(sto -> {
+                           bimonthlyWithGrades.put(sto.bimonthly, studentOldGradeListGrades);
+                       });
+
+               
+
+           }
+
+
+//            studentsList
+//                    .forEach(s -> {
+//                        try {
+//                            bfw.write(s.toString().concat("\n"));
+//                            bfw.newLine();
+//                            studentOldGradeList
+//                                    .stream()
+//                                    .filter(st -> st.studentEnrollment == s.studentEnrollment)
+//                                    .forEach(st -> {
+//                                        try {
+//                                            bfw.write(String.format(localeBr, "Nota: %-8.2f Bimestre: %dº | Matéria: %s | Atividade: %s", st.studentGrade, st.bimonthly, st.subject, st.gradeType));
+//                                            bfw.newLine();
+//                                            bfw.newLine();
+//                                        } catch (IOException e) {
+//                                            throw new RuntimeException(e);
+//                                        }
+//                                    });
+//                        } catch (IOException e) {
+//
+//                        }
+//                        try {
+//
+//                            bfw.write("Média por Bimestre:\n");
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        studentBimonthlyAvgList
+//                                .stream()
+//                                .filter(st -> st.studentEnrollment == s.studentEnrollment)
+//                                .forEach(st -> {
+//                                    try {
+//                                        bfw.write(String.format(localeBr,"Bimestre: %dº | Média: %.2f", st.bimonthlyAvg, st.studentBimonthlyAvg).concat("\n"));
+//                                    } catch (IOException e) {
+//                                        throw new RuntimeException(e);
+//                                    }
+//                                });
+//                        try {
+//                            bfw.newLine();
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//                    });
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        studentsList
-                .forEach(s -> {
 
-                });
     }
 
 
