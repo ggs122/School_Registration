@@ -160,7 +160,11 @@ public class Student implements AllInterfacesOfStudent {
         return studentLastName;
     }
 
-//    protected String getTeachersStudentFirstName() {
+    protected Subject getSubject() {
+        return subject;
+    }
+
+    //    protected String getTeachersStudentFirstName() {
 //        return teachersStudentFirstName;
 //    }
 //
@@ -247,6 +251,7 @@ public class Student implements AllInterfacesOfStudent {
 
         try(BufferedWriter bfw = new BufferedWriter(new FileWriter("StudentsList/studentsList.txt"))) {
             Locale localeBr = Locale.forLanguageTag("pt-BR");
+            bfw.write("---------------------------------------------------------------------------------\n");
             bfw.write("Lista de Estudantes da Escola:");
             bfw.newLine();
             bfw.newLine();
@@ -254,43 +259,81 @@ public class Student implements AllInterfacesOfStudent {
            for(var s : studentsList) {
                bfw.write(s.toString().concat("\n"));
 
-             Map<Integer, List<Double>> studentOldGradeListMap = studentOldGradeList
+
+             Map<Subject, Map<Integer, List<Double>>> studentOldGradeListMap = studentOldGradeList
                        .stream()
                        .filter(st -> st.studentEnrollment == s.studentEnrollment)
                      .collect(Collectors.groupingBy(
-                             Student::getBimonthly,
-                             Collectors.mapping(Student::getStudentGrade, Collectors.toList())
+                             Student::getSubject,
+                             Collectors.groupingBy(
+                              Student::getBimonthly,
+                              Collectors.mapping(Student::getStudentGrade, Collectors.toList())
+                             )
                      ));
 
              bfw.newLine();
-             bfw.write("Notas Bimestrais:\n");
              studentOldGradeListMap
-                     .forEach((x, y) -> {
+                     .forEach((sub, bi) -> {
                          try {
-                             bfw.write("Bimestre: " + x + "º Notas: " + y + "\n");
-                             bfw.newLine();
+                             bfw.write("\nMatéria: " + sub.name() + "\n\n");
+                             bfw.write("Notas Bimestrais:\n");
+                             bi.forEach((bim, grades) -> {
+                                 try {
+                                     bfw.write("Bimestre: " + bim + "º Notas: " + grades + "\n\n");
+                                 } catch (IOException e) {
+                                     throw new RuntimeException(e);
+                                 }
+                             });
                          } catch (IOException e) {
                              throw new RuntimeException(e);
                          }
                      });
-             bfw.write("Médias Bimestrais: \n");
-              studentBimonthlyAvgList
-                      .stream()
-                      .filter(sto -> sto.studentEnrollment == s.studentEnrollment)
-                      .forEach(sto -> {
-                          try {
-                              bfw.write(String.format(localeBr, "Bimestre: %dº | Média: %.2f", sto.bimonthlyAvg, sto.studentBimonthlyAvg).concat("\n"));
-                          } catch (IOException e) {
-                              throw new RuntimeException(e);
-                          }
-                          try {
-                              bfw.newLine();
-                          } catch (IOException e) {
-                              throw new RuntimeException(e);
-                          }
-                      });
-           }
 
+             bfw.write("Médias Bimestrais: \n");
+
+              Map<Integer, Double> studentOldGradeListAvgBimonthly = studentOldGradeList
+                       .stream()
+                       .filter(sto -> sto.studentEnrollment == s.studentEnrollment)
+                       .collect(Collectors.groupingBy(
+                               Student::getBimonthly,
+                               Collectors.summingDouble(Student::getStudentGrade)
+                       ));
+
+              studentOldGradeListAvgBimonthly.replaceAll((b, g) -> g / 5);
+
+               studentOldGradeListAvgBimonthly
+                       .forEach((b, g) -> {
+                           try {
+                               bfw.write(String.format(localeBr,"Bimestre: %dº | Média %.1f", b, g).concat("\n"));
+                           } catch (IOException e) {
+                               throw new RuntimeException(e);
+                           }
+                       });
+
+
+
+             double studentBimonthlyAvgDouble = studentOldGradeListAvgBimonthly.values()
+                      .stream()
+                              .mapToDouble(Double::doubleValue)
+                                      .average()
+                                              .orElse(0);
+
+             double trunstudentBimonthlyAvgDouble = Math.floor(studentBimonthlyAvgDouble * 10) / 10;
+
+
+             String finalResult = (trunstudentBimonthlyAvgDouble >= 6 ? "Aprovado" : "Reprovado");
+
+             bfw.newLine();
+             bfw.write("Resultado Final:");
+             bfw.newLine();
+             bfw.write(String.format(localeBr, "Nota final: %.1f", trunstudentBimonthlyAvgDouble));
+             bfw.newLine();
+             bfw.write(String.format(localeBr, "Status: %s", finalResult));
+             bfw.newLine();
+             bfw.newLine();
+               bfw.write("---------------------------------------------------------------------------------\n");
+
+           }
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -3,9 +3,15 @@ package br.com.javainsider.Enrollment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Teacher implements AllInterfacesOfTeacher{
 
@@ -170,6 +176,33 @@ public class Teacher implements AllInterfacesOfTeacher{
            IO.println(String.format(localeBr, "Professor(a) %s %s %s -> Não foi encontrado(a) no banco de dados", teacherFirstName, teacherMidlleName, teacherLastName));
            IO.println("----------------------------------------------------------------------------------------");
        }
+    }
+
+    public void teacherLog() {
+        File file = new File("TeacherList");
+
+        if (!file.exists()) {
+            file.mkdir();
+        }
+
+        try(BufferedWriter bft = new BufferedWriter(new FileWriter("TeacherList/teacherList.txt"))) {
+            bft.write("Lista de professores da Escola:\n");
+
+          Map<String, Map<SubjectTeacher, List< String>>> teacherListMap = teachersList
+                    .stream()
+                  .collect(Collectors.groupingBy(
+                          Teacher::getTeacherClass,
+                          Collectors.groupingBy(
+                                  Teacher::getSubjectTeacher,
+                                  Collectors.mapping(Teacher::getTeacherFirstName, Collectors.toList())
+
+                          )
+                  ));
+
+
+        } catch (IOException i) {
+
+        }
     }
 
     @Override
