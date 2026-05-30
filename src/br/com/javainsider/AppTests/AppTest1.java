@@ -75,11 +75,11 @@ public class AppTest1 {
 //        Student student3 = new Student();
 //        student3.printStudent();
 
-        Student student4 = new Student();
-        student4.createStudent(1, "Igor", "Melo", "de Oliveira");
-        student4.CreateGradeOfStudent(401, 1, 1, 1, 6.5);
-        student4.CreateGradeOfStudent(401, 1, 1, 2, 6.5);
-        student4.CreateGradeOfStudent(401, 1, 1, 3, 6.5);
+//        Student student4 = new Student();
+//        student4.createStudent(1, "Igor", "Melo", "de Oliveira");
+//        student4.CreateGradeOfStudent(401, 1, 1, 1, 6.5);
+//        student4.CreateGradeOfStudent(401, 1, 1, 2, 6.5);
+//        student4.CreateGradeOfStudent(401, 1, 1, 3, 6.5);
 
 
         Teacher teacher = new Teacher();
