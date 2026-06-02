@@ -179,6 +179,7 @@ public class Teacher implements AllInterfacesOfTeacher{
     }
 
     public void teacherLog() {
+        Locale localeBr = Locale.forLanguageTag("pt-BR");
         File file = new File("TeacherList");
 
         if (!file.exists()) {
@@ -187,6 +188,7 @@ public class Teacher implements AllInterfacesOfTeacher{
 
         try(BufferedWriter bft = new BufferedWriter(new FileWriter("TeacherList/teacherList.txt"))) {
             bft.write("Lista de professores da Escola:\n");
+            bft.newLine();
 
           Map<String, Map<SubjectTeacher, List< String>>> teacherListMap = teachersList
                     .stream()
@@ -198,6 +200,26 @@ public class Teacher implements AllInterfacesOfTeacher{
 
                           )
                   ));
+
+          teacherListMap
+                  .forEach((c, st) -> {
+                      try {
+                          bft.write(String.format(localeBr, "Turma: %s\n",c));
+
+                          st.forEach((s, t) -> {
+                              try {
+                                  bft.write(String.format(localeBr, "Matéria: %-10s | Professora %s\n", s, t));
+                                  bft.newLine();
+                              } catch (IOException e) {
+                                  throw new RuntimeException(e);
+                              }
+                          });
+
+
+                      } catch (IOException e) {
+                          throw new RuntimeException(e);
+                      }
+                  });
 
 
         } catch (IOException i) {
