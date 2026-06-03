@@ -1,0 +1,11 @@
+Lista de professores da Escola:
+
+Turma: 1507
+Matéria: MATEMÁTICA | Professora [Simone]
+
+Turma: 1505
+Matéria: HISTÓRIA   | Professora [Márcia]
+
+Turma: 1504
+Matéria: MATEMÁTICA | Professora [Isadora]
+

@@ -1,0 +1,46 @@
+---------------------------------------------------------------------------------
+Lista de Estudantes da Escola:
+
+Id: 10000 | Matrícula: 400 | Turma: 1504 | Aluno: ROMUALDO        FERREIRA        DA SILVA       
+
+
+Matéria: MATEMÁTICA
+
+Notas Bimestrais:
+Bimestre: 1º Notas: [3.5, 6.0, 7.5, 8.0, 5.5]
+
+Bimestre: 2º Notas: [10.0, 10.0, 10.0, 10.0, 10.0]
+
+Bimestre: 3º Notas: [7.5, 5.5, 4.5, 9.5, 10.0]
+
+Bimestre: 4º Notas: [6.5, 5.5, 4.5, 7.5, 3.5]
+
+Médias Bimestrais: 
+Bimestre: 1º | Média 6,1
+Bimestre: 2º | Média 10,0
+Bimestre: 3º | Média 7,4
+Bimestre: 4º | Média 5,5
+
+Resultado Final:
+Nota final: 7,2
+Status: Aprovado
+
+---------------------------------------------------------------------------------
+Id: 10001 | Matrícula: 401 | Turma: 1505 | Aluno: HELIAS          SILVA           SOARES         
+
+Médias Bimestrais: 
+
+Resultado Final:
+Nota final: 0,0
+Status: Reprovado
+
+---------------------------------------------------------------------------------
+Id: 10002 | Matrícula: 402 | Turma: 1505 | Aluno: SOLANGE         COUTO           MARTINS        
+
+Médias Bimestrais: 
+
+Resultado Final:
+Nota final: 0,0
+Status: Reprovado
+
+---------------------------------------------------------------------------------
