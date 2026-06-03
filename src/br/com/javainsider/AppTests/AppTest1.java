@@ -86,6 +86,7 @@ public class AppTest1 {
         teacher.createTeacher(1, 1,"Isadora", "dos Santos", "Silva");
         teacher.createTeacher(2, 2,"Márcia", "Souza", "Soares");
         teacher.createTeacher(2, 2,"Márcia", "Souza", "Soares");
+        teacher.createTeacher(4, 1, "Simone", "Soares", "Silva");
         teacher.teacherLog();
         teacher.printTeachers();
 
